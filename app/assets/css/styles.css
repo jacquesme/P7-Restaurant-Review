@@ -1,0 +1,469 @@
+body{
+    font-family: 'Advent Pro', sans-serif;
+    margin: 0;
+}
+
+.container-fluid {
+    background-color: rgb(73, 60, 60);
+}
+
+/********************************************************
+Header Styling
+********************************************************/
+#header {
+    background-image: url('../../assets/images/header-image.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+#logo {
+    margin: 9px 0;
+}
+
+#logo img {
+    margin-left: 412px;
+}
+
+#main-heading {
+    padding-left:  66px;
+}
+
+#main-heading h1 {
+    font-family: 'Advent Pro', sans-serif;
+    font-size: 49px;
+    color: #fff;
+}
+
+#main-heading span {
+    margin-left: 12px;
+    font-size: 18px;
+    font-style: italic;
+    color: #fff;
+}
+
+/********************************************************
+Main Container Styling
+********************************************************/
+#main-container {
+    background-color: #e8491d;
+    margin: 8px 0px;
+}
+
+#loading p {
+    text-align: center;
+    margin-top: 200px;
+    font-family: 'Advent Pro', sans-serif;
+    font-weight: bold;
+    font-size: 27px;
+    color: black;
+}
+
+#loading p span {
+    font-style: italic;
+    color: #fff;
+    margin: 0px 5px;
+}
+
+#map {
+    height: calc(100vh - 155px);
+    width:100%;
+}
+
+#search {
+    margin-top: 5px;
+}
+
+#locationField {
+    position: relative;
+    width: 200px;
+    height: 30px;
+    left: 11px;
+    top: 90px;
+    z-index: 5;
+}
+
+#autocomplete-input {
+    font-size: 15px;
+    font-weight: bold;
+    color: #e8491d;
+    padding: 5px;
+    width: 84%;
+    border: 2px solid #a33516;
+    background-color: rgb(228, 225, 225);
+    border-radius: 5px;
+}
+
+/*Sort by star rating*/
+#select-heading {
+    margin-top: 6px;
+    font-family: 'Advent Pro', sans-serif;
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: #fff;
+}
+
+select {
+    border: 2px solid #a33516;
+    border-radius: 9px;
+    padding: 3px;
+    background-color: rgb(228, 225, 225);
+    width: 222px;
+}
+
+#listing {
+    width: 100%;
+    height: calc(100vh - 180px);
+    overflow: auto;
+    cursor: pointer;
+    overflow-x: hidden;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.sort {
+    text-align: center;
+}
+
+.placeIcon{
+    height:80px;
+}
+
+.placeIcon img {
+    width: 105px;
+    height: 80px;
+    margin-right: 15px;
+}
+
+#results .rating{
+    font-size: 21px;
+    color:  gold;
+}
+
+.results-list{
+    padding: 10px 0;
+    border-bottom: 2px solid #a33516;
+}
+
+.placeDetails{
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.placeDetails .name {
+    font-family: 'Advent Pro', sans-serif;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    font-size: 16px;
+    color: #fff;
+}
+
+.placeDetails .reviews-link {
+    color: gold;
+    letter-spacing: .4px;
+}
+
+.results-list:hover{
+    background-color: #a33516;
+}
+
+.results-list:last-child{
+    margin-bottom: 10px;
+}
+
+#rating {
+    font-size: 13px;
+    font-family: 'Advent Pro', sans-serif;
+}
+
+/*Info Window*/
+
+#info-window{
+    max-width:300px;
+}
+
+.restaurant-details{
+    margin:0;
+}
+#info-content .extra-details{
+    color: #383838;
+    font-weight: 300;
+    font-size: 13px;
+    max-width:300px;
+}
+#info-content .extra-details div{
+    padding-bottom:5px;
+}
+#iw-rating{
+    color: gold;
+    font-size: 25px;
+    text-align: center;
+    font-weight:600;
+    margin:0;
+}
+#iw-url {
+    font-size: 20px;
+    text-align: center;
+    margin: 5px 0 10px 0;
+}
+
+
+#iw-url a{
+    color: #a33516;
+}
+#website a, #iw-website a{
+    color: #a33516;
+}
+#iw-url a, #website a #iw-website a{
+    text-decoration:none;
+}
+
+#iw-url a:hover{
+    color: #e8491d;
+    font-weight: bolder;
+}
+#website a:hover, #iw-website a:hover{
+    color: #e8491d;
+    font-weight: bold;
+}
+#info-content .gm-style .photo{
+    height: 190px;
+    width: 300px;
+}
+/* add a review form */
+
+#add-review{
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+}
+#add-review input, #add-review textarea{
+    margin-bottom:20px;
+}
+
+#your-review{
+    height: 70px;
+    font-size: 12px;
+    padding: 5px;
+}
+#your-rating{
+    margin-bottom: 18px;
+    width: 63px;
+    height: 24px;
+    border: 1px solid #a33516;
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+}
+
+#your-rating:hover {
+    color: rgb(255, 255, 255);
+    background-color: #e8491d;
+}
+
+.main-button{
+    background-color:#eb853b;
+    color:#fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 11px;
+    height: 40px;
+    min-width: 90px;
+    margin: 0 0 0 10px;
+}
+.main-button a{
+    text-decoration: none;
+    color:#fff;
+}
+#see-photo, #see-street-view{
+    min-width:105px;
+}
+#street-view{
+    height: auto;
+    max-height: 600px;
+    order: 1;
+    width: 100%;
+    min-width: 320px;
+}
+.review-header{
+    display:flex;
+    justify-content: space-between;
+}
+#add-review label{
+    font-family: 'Advent Pro', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #e8491d;
+    margin-bottom: 5px;
+}
+#add-review input{
+    height: 15px;
+    padding: 12px;
+    font-size: 13px;
+    width: 250px;
+}
+#add-review textarea, #add-review input{
+    border: 1px solid #a33516;
+    border-radius: 4px;
+}
+
+#info-content-small{
+    font-size:13px;
+}
+#iw-icon-small .gm-style .photo{
+    width:50px;
+    height:35px;
+}
+#iw-icon .photo{
+    max-width: 300px;
+    max-height: 200px;
+}
+#photo{
+    order: 2;
+}
+#info-content-small .photo{
+    height: 40px;
+    width: 50px;
+}
+#iw-rating-small{
+    color: #e8491d;
+    margin:0;
+}
+#iw-url-small, .reviews-link{
+    text-decoration: none;
+    color: #a33516;
+}
+.reviews-link:hover{
+    text-decoration: underline;
+}
+
+#iw-reviews{
+    color: #a33516;
+    text-decoration:none;
+    font-size: 16px;
+    text-align: center;
+    display: block;
+    padding-top: 10px;
+}
+#iw-reviews:hover{
+    color: #e8491d;
+    font-weight: bold;
+}
+.button-menu{
+    display:flex;
+    justify-content: flex-end;
+}
+.heading h2{
+    margin:0;
+}
+
+/* add new restaurant form info window */
+
+.photo-big {
+    height: 190px;
+}
+
+#form-add-restaurant{
+    max-width: 300px;
+
+}
+#form-add-restaurant input{
+    height: 20px;
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+#form-add-restaurant select{
+    height: 20px;
+    width: 50px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    border-radius: unset;
+    border: none;
+}
+.add-res-heading{
+    color: #a33516;
+}
+#add-restaurant {
+    width: 95%;
+}
+
+.profile-photo{
+    width: 35px;
+    height: 35px;
+    display: block;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-right:20px;
+}
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 3; /* Sit on top */
+    left: 471px !important;
+    top: 138px !important;
+    padding: 12px;
+    width: 50%; 
+    height: 70%; 
+    overflow: auto !important; 
+    background-color: rgb(255, 255, 255); 
+    border: 2px solid #e8491d;
+    border-radius: 3px;
+    box-shadow: 6px 6px 18px black;
+}
+
+/* The Close Button */
+.close {
+    color: rgb(102, 101, 101);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#see-photo{
+    font-family: 'Advent Pro', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background-color: #e8491d;
+    border: 2px solid #a33516;
+    margin-top: 18px;
+    margin-right: 33px;
+}
+
+.review-label {
+    font-family: 'Advent Pro', sans-serif;
+    font-size: 15px;
+    color: #e8491d;
+}
+
+#your-review {
+    font-size: 13px;
+    border: 1px solid #a33516 !important;
+    border-radius: 6px;
+}
+
+#add-to-array {
+    font-family: 'Advent Pro', sans-serif;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    color: rgb(255, 255, 255);;
+    background-color: #e8491d;
+    padding: 6px;
+    border: 2px solid #a33516;
+    border-radius: 6px;
+}

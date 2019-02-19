@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fine Dinning</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Advent+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="app/assets/css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <header id="header" class="col-md-12">
+                <div id="logo" class="col-md-4">
+                    <img src="app/assets/images/logo.png" style="width: 12%;"/>
+                </div>
+                <div id="main-heading" class="col-md-8">
+                    <h1>Fine Dinning<span>Restaurant Reviews</span></h1>
+                </div>    
+            </header>
+        </div>
+        <div  id="main-container" class="container-fluid">
+            <div class="row">
+                <main>
+                    <div id="map-and-list">
+                        <div class="col-md-10">
+                            <div id="search">
+                                <div id="locationField">
+                                    <input id="autocomplete-input" placeholder="Search by city" type="text"/>
+                                </div>
+                            </div>
+                            <div class="map-wrapper">
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">    
+                            <div class="info-wrapper">
+                                <center><label for="sort" id="select-heading">Resturants by rating</label></center>
+                                <div id="sort-options" class="sort">
+                                    
+                                        <select name="sort" id="sort">
+                                            <option value="allStars">all Stars</option>
+                                            <option value="sortAsc">Highest Rating</option>
+                                            <option value="sortDesc">Lowest Rating</option>
+                                            <option value="sort3Star">1-3 stars</option>
+                                            <option value="sort4Star">4 star</option>
+                                            <option value="sort5Star">5 star</option>
+                                        </select>
+                                    
+                                    <div id="listing">
+                                        <div id="results"></div>
+                                    </div>
+                                </div>
+                            </div>  
+
+                            <div id="info-content">
+                                <div id="iw-icon"></div>
+                                <h3 id="iw-rating"></h3>
+                                <div class="extra-details">
+                                    <div id="iw-url"></div>
+                                    <div id="iw-address"></div>
+                                    <div id="iw-phone"></div>
+                                    <div id="iw-website"></div>
+                                    <div id="iw-open"></div>
+                                    <a href="#restaurant-info" id="iw-reviews"></a>
+                                </div>
+                            </div>
+                            <div id="info-content-small">
+                                <div id="iw-icon-small"></div>
+                                <h3 id="iw-rating-small"></h3>
+                                <div class="extra-details">
+                                    <div id="iw-url-small"></div>
+                                </div>
+                            </div>
+                            <div id="info-content-new-restaurant">
+                                <form id="form-add-restaurant" action="post"></form>
+                            </div>
+                        </div>    
+
+                    </div>
+                </main>
+                
+            </div>
+        </div>  
+
+        <!--Main restaurant page at bottom of website-->
+        <div class="modal" id="myModal"> 
+            <span class="close" id="modal-close">&times;</span>            
+            <div id="restaurant-info">
+                <div id="street-view">
+                    <div id="street-view-wrapper">
+                        <div id="pano"></div>
+                    </div>
+                    <div id="photo"></div>    
+                </div>
+                <div class="button-menu">        
+                    <button class="main-button" id="see-photo" >See Photo</button>
+                </div>
+                <div class="restaurant">    
+                    <h2 class="restaurant-name" id="name"></h2>
+                    <p class="restaurant-details" id="address"></p>
+                    <p class="restaurant-details" id="telephone"></p>
+                    <p class="restaurant-details" id="website"></p>
+                    <div class="review-header">
+                        <h3 class="title">Reviews</h3>
+                    </div>
+                    <div id="reviews"></div>
+                    <div id="show-message"></div>
+                    <div id="form-wrapper">
+                        <form id="add-review">
+                            <label for="your-name" class="review-label">Please add Your Name</label>
+                            <input type="text" name="your-name" id="your-name" placeholder="Your Name" required>
+                            <label for="your-rating" class="review-label">What Rating do you give this Restaurant</label>
+                            <select name="your-rating" id="your-rating" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <label for="your-review" class="review-label">What would you like to say about this restaurant</label>
+                            <textarea name="your-review" id="your-review" placeholder="Your Review" required></textarea>
+                            <button type="submit" id="add-to-array" class="button">Add Review</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJzD5cxYiU033eGDAb6p3t9-vwUPGy0WA&libraries=places&callback=Gmap.init" async defer></script>
+<script src="./app/src/restaurants.js"></script>
+<script src="./app/src/modal.js"></script>
+<script src="./app/src/map.js"></script>
+<!--<script src="./app/src/index.js"></script>-->
+
+<!--<script src="https://maps.googleapis.com/maps/api/streetview?size=400x400&location=47.097345,37.542656&fov=90&heading=235&pitch=10&key=AIzaSyDJzD5cxYiU033eGDAb6p3t9-vwUPGy0WA"></script>-->
+
+</body>
+</html>
