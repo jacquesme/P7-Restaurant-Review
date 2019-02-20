@@ -167,9 +167,7 @@ var Gmap = {
                     });
                     Gmap.addResultsAndMarkers(i, results, i);
                 }
-                /*for (let i = 0; i < results.length; i++) {
-                    
-                }*/
+
                 for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
                     Restaurant.markers[Restaurant.googleRestaurants.length +i] = new google.maps.Marker({
                         position: Restaurant.myRestaurants[i].geometry.location,
