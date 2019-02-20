@@ -277,16 +277,10 @@ select {
     text-decoration: none;
     color:#fff;
 }
-#see-photo, #see-street-view{
+#see-photo {
     min-width:105px;
 }
-#street-view{
-    height: auto;
-    max-height: 600px;
-    order: 1;
-    width: 100%;
-    min-width: 320px;
-}
+
 .review-header{
     display:flex;
     justify-content: space-between;
