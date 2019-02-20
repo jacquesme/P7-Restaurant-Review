@@ -157,6 +157,7 @@ var Gmap = {
                 Gmap.clearResults();
                 Gmap.clearMarkers();
     
+                //Restaurant.googleRestaurants = []; Remove
                 for (let i = 0; i < results.length; i++) {
                     Restaurant.googleRestaurants.push(results[i]);
                     Restaurant.markers[i] = new google.maps.Marker({
@@ -166,7 +167,9 @@ var Gmap = {
                     });
                     Gmap.addResultsAndMarkers(i, results, i);
                 }
-
+                /*for (let i = 0; i < results.length; i++) {
+                    
+                }*/
                 for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
                     Restaurant.markers[Restaurant.googleRestaurants.length +i] = new google.maps.Marker({
                         position: Restaurant.myRestaurants[i].geometry.location,
@@ -283,67 +286,3 @@ var Gmap = {
     }
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Search function for searching new restaurants when map is dragged or place changed
-/*search: function() {
-        
-    var places = new google.maps.places.PlacesService(Gmap.map);
-    var search = {
-        bounds: Gmap.map.getBounds(),
-        type: ['restaurant']
-    };
-
-
-    places.nearbySearch(search, function (results, status) {
-
-        if (status == google.maps.places.PlacesServiceStatus.OK){
-            Gmap.clearMarkers();
-            Gmap.clearResults();
-
-            Restaurant.googleRestaurants = [];
-            for (let i = 0; i < results.length; i++) {
-                Restaurant.googleRestaurants.push(results[i]);
-            }
-                
-            for(var i = 0; i < results.length; i ++) {
-                Restaurant.googleRestaurants.push(results[i]);
-                Gmap.createMarker(results[i].geometry.location.lat(), results[i].geometry.location.lng());
-                Gmap.addResultList(results[i]);
-            }
-
-            // If the user clicks a restaurant marker, show the details of that restaurant
-            google.maps.event.addListener(Restaurant.markers[0], 'mouseover', Gmap.showInfoWindowSmall);
-            //google.maps.event.addListener(Restaurant.markers[i], 'mouseout', Gmap.closeInfoWindowSmall);
-        }
-
-    });
-
-    Gmap.map.setCenter();
-
-},*/
