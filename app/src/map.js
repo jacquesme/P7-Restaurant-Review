@@ -157,7 +157,6 @@ var Gmap = {
                 Gmap.clearResults();
                 Gmap.clearMarkers();
     
-                //Restaurant.googleRestaurants = []; Remove
                 for (let i = 0; i < results.length; i++) {
                     Restaurant.googleRestaurants.push(results[i]);
                     Restaurant.markers[i] = new google.maps.Marker({
