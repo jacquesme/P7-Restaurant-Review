@@ -10,6 +10,7 @@ var Gmap = {
     },
     request: new XMLHttpRequest(),
     pos: null,
+    labels: '12345',
     photo: [],
     sortBy: document.getElementById('sort'),
     
@@ -82,30 +83,31 @@ var Gmap = {
     },
 
     //Creates the markers with stars and adds default if no rating
-    createMarker: function(result) {
-        var rating = Math.round(result.rating);
-        var markerIcon;
-        if (isNaN(rating)) {
-            markerIcon = 'app/assets/images/' + 'marker_default.png';
-        } else {
-            markerIcon = 'app/assets/images/' + 'marker_' + rating + '.png';
+    createMarker: function(ratings) {
+        var image;
+        if(ratings <= 3) {
+            image = {
+                url: 'app/assets/images/marker_3.png'
+            };
+        }else if(ratings > 3 && ratings <= 4) {
+            image = {
+                url: 'app/assets/images/marker_4.png'
+            };
+        }else if(ratings > 4 && ratings <= 5) {
+            image = {
+                url: 'app/assets/images/marker_4.png'
+            };
+        }else {
+            image = {
+                url: 'app/assets/images/marker_default.png'
+            };
         }
-        return markerIcon;
-        //Call create marker and place on the map from here
-    },
 
-    //Adds the results and the markers
-    addResultsAndMarkers: function(markersI, array, i){
-        Gmap.addResultList(array[i], markersI);
-        Restaurant.markers[markersI].placeResult = array[i];
-        setTimeout(Gmap.dropMarker(markersI), i * 100);
-    },
-
-    //Drops the markers onto the map
-    dropMarker: function(i) {
-        return function () {
-            Restaurant.markers[i].setMap(Gmap.map);
-        };
+        var marker = new google.maps.Marker({
+            position: Gmap.pos,
+            map: Gmap.map,
+            icon: image
+        });
     },
 
     autoComplete: function(){
@@ -139,75 +141,43 @@ var Gmap = {
     //If the map is dragged search again for restaurants in vicinity
     mapDragged: function() {
         Gmap.map.addListener('dragend', function () {
-            Gmap.sortBy.value = 'allStars';
             Restaurant.myRestaurants = [];
             Gmap.search();
         });
     },
 
-    search: function() {
-        const places = new google.maps.places.PlacesService(Gmap.map);
-        var search = {
-            bounds: Gmap.map.getBounds(),
-            type: ['restaurant']
-        };
-        places.nearbySearch(search, function (results, status) {
-    
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                Gmap.clearResults();
-                Gmap.clearMarkers();
-    
-                //Restaurant.googleRestaurants = []; Remove
-                for (let i = 0; i < results.length; i++) {
-                    Restaurant.googleRestaurants.push(results[i]);
-                    Restaurant.markers[i] = new google.maps.Marker({
-                        position: results[i].geometry.location,
-                        placeId: results[i].id,
-                        icon: Gmap.createMarker(Restaurant.googleRestaurants[i]),
-                    });
-                    Gmap.addResultsAndMarkers(i, results, i);
-                }
-                /*for (let i = 0; i < results.length; i++) {
-                    
-                }*/
-                for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
-                    Restaurant.markers[Restaurant.googleRestaurants.length +i] = new google.maps.Marker({
-                        position: Restaurant.myRestaurants[i].geometry.location,
-                        placeId: Restaurant.myRestaurants[i].id,
-                        icon: Gmap.createMarker(Restaurant.myRestaurants[i]),
-                        zIndex: 52,
-                        id: Restaurant.myRestaurants[i].id,
-                    });
-                    //Function to sort
-                    if (Gmap.sort3Star) {
-                        if (Math.round(Restaurant.myRestaurants[i].rating) <= 3) {
-                            Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
-                        }
-                    } else if (Gmap.sort4Star) {
-                        if (Math.round(Restaurant.myRestaurants[i].rating) === 4) {
-                            Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
-                        }
-                    } else if (Gmap.sort5Star) {
-                        if (Math.round(Restaurant.myRestaurants[i].rating) === 5) {
-                            Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
-                        }
-                    } else {
-                        if (Gmap.sortAsc) {
-                            Restaurant.myRestaurants.sort(function (a, b) {
-                                return b.rating - a.rating;
-                            });
-                        } else if (Gmap.sortDesc) {
-                            Restaurant.myRestaurants.sort(function (a, b) {
-                                return a.rating - b.rating;
-                            });
-                        }
-                        Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
-                    }
-    
-                }
+    //Search function for searching new restaurants when map is dragged or place changed
+search: function() {
+        
+    var places = new google.maps.places.PlacesService(Gmap.map);
+    var search = {
+        bounds: Gmap.map.getBounds(),
+        type: ['restaurant']
+    };
+
+
+    places.nearbySearch(search, function (results, status) {
+
+        if (status == google.maps.places.PlacesServiceStatus.OK){
+            Gmap.clearMarkers();
+            Gmap.clearResults();
+
+            Restaurant.googleRestaurants = [];
+            for(var i = 0; i < results.length; i ++) {
+                Restaurant.googleRestaurants.push(results[i]);
+                Gmap.createMarker(results[i].geometry.location.lat(), results[i].geometry.location.lng());
+                Gmap.addResultList(results[i]);
             }
-        });
-    },
+
+            // If the user clicks a restaurant marker, show the details of that restaurant
+            
+        }
+
+    });
+
+    Gmap.map.setCenter();
+
+},  
 
     //Resets the values of the markers
     clearMarkers: function() {
@@ -279,10 +249,6 @@ var Gmap = {
         resultsDiv.appendChild(listDiv);
     },
 
-    createInfoWindow: function() {
-        infowindowSmall = google.maps.InfoWindow({
-         content: document.getElementById()   
-        });
-    }
+    
 
 };
