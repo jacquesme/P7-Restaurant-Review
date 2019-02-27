@@ -83,31 +83,37 @@ var Gmap = {
     },
 
     //Creates the markers with stars and adds default if no rating
-    createMarker: function(ratings) {
-        var image;
-        if(ratings <= 3) {
-            image = {
-                url: 'app/assets/images/marker_3.png'
-            };
-        }else if(ratings > 3 && ratings <= 4) {
-            image = {
-                url: 'app/assets/images/marker_4.png'
-            };
-        }else if(ratings > 4 && ratings <= 5) {
-            image = {
-                url: 'app/assets/images/marker_4.png'
-            };
-        }else {
-            image = {
-                url: 'app/assets/images/marker_default.png'
-            };
+    createMarker: function(lat, lng) {
+        var ratingResults;
+        for(var i = 0; i < Restaurant.googleRestaurants.length; i ++) {
+            ratingResults = Math.round(Restaurant.googleRestaurants[i].rating);
         }
-
+        var markerIcon = null;
+        //Choose marker icon with the relevent star ratings number
+        if(ratingResults == 1) {
+            markerIcon = 'app/assets/images/marker_1.png';
+        }else if(ratingResults == 2) {
+            markerIcon = 'app/assets/images/marker_2.png';
+        }else if(ratingResults == 3) {
+            markerIcon = 'app/assets/images/marker_3.png';
+        }else if(ratingResults == 4) {
+            markerIcon = 'app/assets/images/marker_4.png';
+        }else if(ratingResults == 5) {
+            markerIcon = 'app/assets/images/marker_5.png';
+        }else {
+            markerIcon = 'app/assets/images/marker_default.png';
+        }
+        //Create markers
         var marker = new google.maps.Marker({
-            position: Gmap.pos,
+            position: new google.maps.LatLng(lat, lng),
+            placeId: Restaurant.googleRestaurants[0].id,
             map: Gmap.map,
-            icon: image
+            icon: markerIcon
         });
+        //Place markers of nearby restaurants on the maps
+        marker.setMap(Gmap.map);
+        //Push all markers into markers array
+        Restaurant.markers.push(marker);
     },
 
     autoComplete: function(){
