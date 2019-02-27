@@ -153,37 +153,31 @@ var Gmap = {
     },
 
     //Search function for searching new restaurants when map is dragged or place changed
-search: function() {
-        
-    var places = new google.maps.places.PlacesService(Gmap.map);
-    var search = {
-        bounds: Gmap.map.getBounds(),
-        type: ['restaurant']
-    };
+    search: function() {   
+        var places = new google.maps.places.PlacesService(Gmap.map);
+        var search = {
+            bounds: Gmap.map.getBounds(),
+            type: ['restaurant']
+        };
 
+        places.nearbySearch(search, function (results, status) {
 
-    places.nearbySearch(search, function (results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK){
+                Gmap.clearMarkers();
+                Gmap.clearResults();
+                Restaurant.getPlaces();
 
-        if (status == google.maps.places.PlacesServiceStatus.OK){
-            Gmap.clearMarkers();
-            Gmap.clearResults();
-
-            Restaurant.googleRestaurants = [];
-            for(var i = 0; i < results.length; i ++) {
-                Restaurant.googleRestaurants.push(results[i]);
-                Gmap.createMarker(results[i].geometry.location.lat(), results[i].geometry.location.lng());
-                Gmap.addResultList(results[i]);
+                Restaurant.googleRestaurants = [];
+                for(var i = 0; i < results.length; i ++) {
+                    Restaurant.googleRestaurants.push(results[i]);
+                    Gmap.createMarker(results[i].geometry.location.lat(), results[i].geometry.location.lng());
+                    Gmap.addResultList(results[i]);
+                }
+            
             }
 
-            // If the user clicks a restaurant marker, show the details of that restaurant
-            
-        }
-
-    });
-
-    Gmap.map.setCenter();
-
-},  
+        });
+    },  
 
     //Resets the values of the markers
     clearMarkers: function() {
@@ -204,8 +198,11 @@ search: function() {
     },
 
     //Create a photo from the maps api
-    createPhoto: function(place) {  
-        var photos = place.photos;
+    createPhoto: function() {  
+        for(var i = 0; i < Restaurant.googleRestaurants.length; i ++) {
+            photo = Restaurant.googleRestaurants[i].photos;
+        }
+        var photos = photo;
 
         if (!photos) {
             photo = 'app/assets/images/food.png';
@@ -236,14 +233,12 @@ search: function() {
     },
 
     //Creates the list of restaurants on the right of the map
-    addResultList: function(result, i) {
+    addResultList: function(result) {
         var resultsDiv = document.getElementById('results');
         var listDiv = document.createElement('div');
         listDiv.setAttribute('class', 'results-list');
-        listDiv.onclick = function () {
-            google.maps.event.trigger(markers[i], 'click');
-        };
-        var details = `<div class="placeIcon"><img src ="${Gmap.createPhoto(result)}" /></div>
+        
+        var details = `<div class="placeIcon"><img src ="${Gmap.createPhoto()}" /></div>
                         <div class="placeDetails">
                         <div class="name">${result.name}</div>`;
         if(result.rating){
