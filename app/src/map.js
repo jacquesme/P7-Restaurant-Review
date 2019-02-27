@@ -116,6 +116,14 @@ var Gmap = {
         Restaurant.markers.push(marker);
     },
 
+    //If the map is dragged search again for restaurants in vicinity
+    mapDragged: function() {
+        Gmap.map.addListener('dragend', function () {
+            Restaurant.myRestaurants = [];
+            Gmap.search();
+        });
+    },
+
     autoComplete: function(){
         autocomplete = new google.maps.places.Autocomplete(
             //Input fields on autocomplete search for city
@@ -142,14 +150,6 @@ var Gmap = {
         } else {
             document.getElementById('autocomplete').placeholder = 'Search for a City';
         }
-    },
-
-    //If the map is dragged search again for restaurants in vicinity
-    mapDragged: function() {
-        Gmap.map.addListener('dragend', function () {
-            Restaurant.myRestaurants = [];
-            Gmap.search();
-        });
     },
 
     //Search function for searching new restaurants when map is dragged or place changed
