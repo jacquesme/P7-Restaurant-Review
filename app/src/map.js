@@ -234,16 +234,16 @@ var Gmap = {
         var resultsDiv = document.getElementById('results');
         var listDiv = document.getElementsByClassName('results-list');
         var details = document.getElementsByTagName('img').src = Gmap.createPhoto();
-        details += document.getElementsByClassName('placeDetails');
-        details += document.getElementsByClassName('name').innerHTML = results.name;    
+        //details += document.getElementsByClassName('placeDetails');
+        //details += document.getElementsByClassName('name').innerHTML = results.name;    
 
-        if(results.rating) {
-            details += document.getElementsByClassName('rating').innerHTML = Gmap.starRating(results);
-        }
+        //if(results.rating) {
+            //details += document.getElementsByClassName('rating').innerHTML = Gmap.starRating(results);
+        //}
 
-        details += document.getElementsByClassName('reviews-link');
+        //details += document.getElementsByClassName('reviews-link');
 
-        listDiv.insertAdjacentHTML("beforeEnd", details);
+        listDiv.insertAdjacentElement("beforeend", details);
         resultsDiv.appendChild(listDiv); 
 
     },
