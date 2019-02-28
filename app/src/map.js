@@ -233,19 +233,23 @@ var Gmap = {
     addRightHandResults: function(results) {
         var resultsDiv = document.getElementById('results');
         var listDiv = document.getElementsByClassName('results-list');
+
+        var newDetails = [];
         var details = document.getElementsByTagName('img').src = Gmap.createPhoto();
-        //details += document.getElementsByClassName('placeDetails');
-        //details += document.getElementsByClassName('name').innerHTML = results.name;    
+        var placeDetails = document.getElementsByClassName('placeDetails');
+        var name = document.getElementsByClassName('name').innerHTML = results.name;
+        if(results.rating) {
+            var rating = document.getElementsByClassName('rating').innerHTML = Gmap.starRating(results);
+        };
+        var reviews = document.getElementsByClassName('reviews-link');
 
-        //if(results.rating) {
-            //details += document.getElementsByClassName('rating').innerHTML = Gmap.starRating(results);
-        //}
+        newDetails.push(details, placeDetails, name, rating, reviews);   
 
-        //details += document.getElementsByClassName('reviews-link');
+        console.log(newDetails);
 
-        listDiv.insertAdjacentElement("beforeend", details);
+        listDiv.appendChildNodes(newDetails);
         resultsDiv.appendChild(listDiv); 
-
+        
     },
 
 }
