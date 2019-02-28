@@ -30,8 +30,8 @@ var Gmap = {
 
                 Gmap.onLocationSuccess(Gmap.pos);
                 Gmap.nearBySearchRestaurants();
-                Gmap.mapDragged();
                 Gmap.autoComplete();
+                Gmap.map.addListener('dragend', Gmap.mapDragged);
         
             }, Gmap.onLocationError)
         }else {
@@ -114,10 +114,8 @@ var Gmap = {
 
     //If map is dreagged search again for restaurants in the vicinity
     mapDragged: function() {
-        Gmap.map.addListener('dragend', function() {
-            Restaurant.googleRestaurants = [];
-            Gmap.search();
-        });
+        Restaurant.googleRestaurants = [];
+        Gmap.search();
     },
 
     autoComplete: function(){
