@@ -10,18 +10,17 @@ var Gmap = {
     },
     request: new XMLHttpRequest(),
     pos: null,
-    labels: '12345',
     photo: [],
-    sortBy: document.getElementById('sort'),
-    
+    hasPhoto: null,
 
     init: function() {
 
         Restaurant.loadRestaurants()
+
+        //Create the map
         Gmap.map = new google.maps.Map(document.getElementById('map'), Gmap.options);
         Gmap.infoWindow = new google.maps.InfoWindow
 
-        //console.log('Init map')
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 Gmap.pos = {
@@ -29,16 +28,16 @@ var Gmap = {
                     lng: position.coords.longitude
                 };
 
-                Gmap.onLocationSuccess(Gmap.pos)
-                Gmap.nearBySearchRestaurants(Gmap.pos);
+                Gmap.onLocationSuccess(Gmap.pos);
+                Gmap.nearBySearchRestaurants();
                 Gmap.mapDragged();
                 Gmap.autoComplete();
-                
+        
             }, Gmap.onLocationError)
         }else {
             console.log("Your browser doesn't support geolocation")
         }
-
+        
     },
 
     onLocationError: function () {
@@ -46,12 +45,13 @@ var Gmap = {
         alert('Error trying to locate you !');
     },
 
+    //adds the circle of where you are
     onLocationSuccess: function (pos) {
         //adds the circle of where you are
-        var marker_red = 'app/assets/images/marker_red.png';
+        var image = 'app/assets/images/marker_red.png';
         var marker = new google.maps.Marker({
             position: Gmap.pos,
-            icon: marker_red,
+            icon: image,
             draggable: true
         });
 
@@ -66,6 +66,7 @@ var Gmap = {
         Gmap.map.setCenter(pos);
     },
 
+    //Nearby search for nearby restaurants
     nearBySearchRestaurants: function() {
         var request = {
             location: Gmap.pos,
@@ -74,15 +75,10 @@ var Gmap = {
         }
         //Uses the places api to search for places of type restaurant
         var service = new google.maps.places.PlacesService(Gmap.map);
-        service.nearbySearch(request, Gmap.callback);
+        service.nearbySearch(request, Gmap.search);
     }, 
 
-    callback: function() {
-        Gmap.search();
-        Gmap.map.setCenter();
-    },
-
-    //Creates the markers with stars and adds default if no rating
+    //Create markers and place on the map
     createMarker: function(lat, lng) {
         var ratingResults;
         for(var i = 0; i < Restaurant.googleRestaurants.length; i ++) {
@@ -116,10 +112,10 @@ var Gmap = {
         Restaurant.markers.push(marker);
     },
 
-    //If the map is dragged search again for restaurants in vicinity
+    //If map is dreagged search again for restaurants in the vicinity
     mapDragged: function() {
-        Gmap.map.addListener('dragend', function () {
-            Restaurant.myRestaurants = [];
+        Gmap.map.addListener('dragend', function() {
+            Restaurant.googleRestaurants = [];
             Gmap.search();
         });
     },
@@ -141,7 +137,7 @@ var Gmap = {
     //When the user selects a city, get the place details for the city
     onPlaceChanged: function() {
         Restaurant.googleRestaurants = [];
-        Gmap.sortBy.value = 'allStars';
+
         var place = autocomplete.getPlace();
         if (place.geometry) {
             Gmap.map.panTo(place.geometry.location);
@@ -152,8 +148,8 @@ var Gmap = {
         }
     },
 
-    //Search function for searching new restaurants when map is dragged or place changed
-    search: function() {   
+    //Search for restaurants in vicinity every time the map bounds are changed
+    search: function() {
         var places = new google.maps.places.PlacesService(Gmap.map);
         var search = {
             bounds: Gmap.map.getBounds(),
@@ -161,35 +157,37 @@ var Gmap = {
         };
 
         places.nearbySearch(search, function (results, status) {
-
-            if (status == google.maps.places.PlacesServiceStatus.OK){
-                Gmap.clearMarkers();
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
                 Gmap.clearResults();
+                Gmap.clearMarker();
                 Restaurant.getPlaces();
 
-                Restaurant.googleRestaurants = [];
                 for(var i = 0; i < results.length; i ++) {
                     Restaurant.googleRestaurants.push(results[i]);
                     Gmap.createMarker(results[i].geometry.location.lat(), results[i].geometry.location.lng());
-                    Gmap.addResultList(results[i]);
-                }
-            
-            }
+                    Gmap.addRightHandResults(results[i]);
+                };
 
+                // If the user clicks a restaurant marker, show the details of that restaurant
+                infoWindowSmall = new google.maps.InfoWindow({
+                    content: document.getElementById('info-content-small')
+                });
+                google.maps.event.addListener(Restaurant.markers[i], 'mouseover', Gmap.showInfoWindowSmall);
+    
+            };
         });
-    },  
+    },
 
-    //Resets the values of the markers
-    clearMarkers: function() {
-        for (var i = 0; i < Restaurant.markers.length; i++) {
-            if (Restaurant.markers[i]) {
+    //Clear markers from the map
+    clearMarker: function() {
+        for(var i = 0; i < Restaurant.markers.length; i ++) {
+            if(Restaurant.markers[i]) {
                 Restaurant.markers[i].setMap(null);
-            }
-        }
+            };
+        };
         Restaurant.markers = [];
     },
 
-    //Resets the values
     clearResults: function() {
         var results = document.getElementById('results');
         while (results.childNodes[0]) {
@@ -198,7 +196,7 @@ var Gmap = {
     },
 
     //Create a photo from the maps api
-    createPhoto: function() {  
+    createPhoto: function() {
         for(var i = 0; i < Restaurant.googleRestaurants.length; i ++) {
             photo = Restaurant.googleRestaurants[i].photos;
         }
@@ -212,9 +210,10 @@ var Gmap = {
             photo = photos[0].getUrl({
                 'maxWidth': 600,
                 'maxHeight': 400
-            });
-        }
+                });
+            }   
         return photo;   
+        
     },
 
     //Creates the stars for the rating
@@ -232,24 +231,27 @@ var Gmap = {
         }
     },
 
-    //Creates the list of restaurants on the right of the map
-    addResultList: function(result) {
+    //Add search result to the right-hand side of the page
+    addRightHandResults: function(results) {
+
         var resultsDiv = document.getElementById('results');
         var listDiv = document.createElement('div');
         listDiv.setAttribute('class', 'results-list');
-        
+
         var details = `<div class="placeIcon"><img src ="${Gmap.createPhoto()}" /></div>
-                        <div class="placeDetails">
-                        <div class="name">${result.name}</div>`;
-        if(result.rating){
-            details += `<div class="rating">${Gmap.starRating(result)}</div>`;
-        }
+                        <div class="placeDetails"></div>
+                        <div class="name">${results.name}</div>`; 
+        
+        if(results.rating) {
+            details += `<div class="rating">${Gmap.starRating(results)}</div>`;
+        };
+
         details += `<a href="#restaurant-info" class="reviews-link">See Reviews</a>
                     </div>`;
+
         listDiv.insertAdjacentHTML("beforeEnd", details);
-        resultsDiv.appendChild(listDiv);
+        resultsDiv.appendChild(listDiv); 
     },
 
-    
 
-};
+}

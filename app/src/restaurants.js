@@ -1,30 +1,24 @@
 var Restaurant = {
-
-    markers: [],
-    newMarkers: [],
-    placeId: null,
+    myRestaurantsPos: {},
     googleRestaurants: [],
-    myRestaurants: [],
+    markers: [],
     
     loadRestaurants: function () {
-        Gmap.request.open('GET', 'http://localhost:3000/results', true);
-        Gmap.request.onload = Restaurant.getPlaces;
+        Gmap.request.open('GET', 'http://localhost:3000/results', true); // Replace 'my_data' with the path to your file
+        Gmap.request.onload = Restaurant.getPlaces
         Gmap.request.send(null);
     },
 
     getPlaces: function () {
-        Restaurant.myRestaurants = JSON.parse(Gmap.request.responseText);
-
-        for(var i = 0; i < Restaurant.myRestaurants.length; i ++) {
-            Restaurant.myRestaurants.forEach(function (results, i) {
-                Restaurant.myRestaurants[i] = results;
-                Gmap.createMarker(Restaurant.myRestaurants[i].geometry.location.lat, Restaurant.myRestaurants[i].geometry.location.lng);
-            })
-            Gmap.addResultList(Restaurant.myRestaurants[i]);
-        };
+        Restaurant.googleRestaurants = JSON.parse(Gmap.request.responseText);
+        Restaurant.googleRestaurants.forEach(function (results, index) {
+            Restaurant.googleRestaurants[index] = results;
+            Gmap.createMarker(Restaurant.googleRestaurants[index].geometry.location.lat, Restaurant.googleRestaurants[index].geometry.location.lng);
+            Gmap.addRightHandResults(Restaurant.googleRestaurants[index]);
+        })
 
         console.log('Loading restaurant places .. ')
-        console.log(Restaurant.myRestaurants);
-    },
-    
+        console.log(Restaurant.googleRestaurants)
+    }
+
 } 
