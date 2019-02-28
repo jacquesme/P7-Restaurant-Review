@@ -231,6 +231,31 @@ var Gmap = {
 
     //Add search result to the right-hand side of the page
     addRightHandResults: function(results) {
+        var resultsDiv = document.getElementById('results');
+        var listDiv = document.getElementsByClassName('results-list');
+        var details = document.getElementsByTagName('img').src = Gmap.createPhoto();
+        details += document.getElementsByClassName('placeDetails');
+        details += document.getElementsByClassName('name').innerHTML = results.name;    
+
+        if(results.rating) {
+            details += document.getElementsByClassName('rating').innerHTML = Gmap.starRating(results);
+        }
+
+        details += document.getElementsByClassName('reviews-link');
+
+        listDiv.insertAdjacentHTML("beforeEnd", details);
+        resultsDiv.appendChild(listDiv); 
+
+    },
+
+}
+
+
+
+
+
+
+/*addRightHandResults: function(results) {
 
         var resultsDiv = document.getElementById('results');
         var listDiv = document.createElement('div');
@@ -249,7 +274,4 @@ var Gmap = {
 
         listDiv.insertAdjacentHTML("beforeEnd", details);
         resultsDiv.appendChild(listDiv); 
-    },
-
-
-}
+    },*/
