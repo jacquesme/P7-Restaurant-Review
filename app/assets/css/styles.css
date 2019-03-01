@@ -111,6 +111,7 @@ select {
     width: 222px;
 }
 
+/*Results on right hand side*/
 #listing {
     width: 100%;
     height: calc(100vh - 180px);

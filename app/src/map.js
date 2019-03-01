@@ -231,24 +231,6 @@ var Gmap = {
 
     //Add search result to the right-hand side of the page
     addRightHandResults: function(results) {
-        var resultsDiv = document.getElementById('results');
-        var listDiv = document.getElementsByClassName('results-list');
-
-        var newDetails = [];
-        var details = document.getElementsByTagName('img').src = Gmap.createPhoto();
-        var placeDetails = document.getElementsByClassName('placeDetails');
-        var name = document.getElementsByClassName('name').innerHTML = results.name;
-        if(results.rating) {
-            var rating = document.getElementsByClassName('rating').innerHTML = Gmap.starRating(results);
-        };
-        var reviews = document.getElementsByClassName('reviews-link');
-
-        newDetails.push(details, placeDetails, name, rating, reviews);   
-
-        console.log(newDetails);
-
-        listDiv.appendChildNodes(newDetails);
-        resultsDiv.appendChild(listDiv); 
         
     },
 
