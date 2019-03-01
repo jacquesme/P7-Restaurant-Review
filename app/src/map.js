@@ -231,17 +231,6 @@ var Gmap = {
 
     //Add search result to the right-hand side of the page
     addRightHandResults: function(results) {
-        
-    },
-
-}
-
-
-
-
-
-
-/*addRightHandResults: function(results) {
 
         var resultsDiv = document.getElementById('results');
         var listDiv = document.createElement('div');
@@ -260,4 +249,13 @@ var Gmap = {
 
         listDiv.insertAdjacentHTML("beforeEnd", details);
         resultsDiv.appendChild(listDiv); 
-    },*/
+    },
+
+}
+
+
+
+
+
+
+    
