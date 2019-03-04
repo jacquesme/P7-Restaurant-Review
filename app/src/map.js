@@ -243,15 +243,15 @@ var Gmap = {
         }
     },
 
+    //Add the results and the markers to the map
     addResultsAndMarkers: function(markersI, array, i){
-        //Adds the results and the markers
         Gmap.addRightHandResults(array[i], markersI);
         Restaurant.markers[markersI].placeResult = array[i];
         setTimeout(Gmap.dropMarker(markersI), i * 100);
     },
 
+    //Drops the markers onto the map
     dropMarker: function(i) {
-        //Drops the markers onto the map
         return function () {
             Restaurant.markers[i].setMap(Gmap.map);
         };
