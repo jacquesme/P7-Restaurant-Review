@@ -9,7 +9,7 @@ var myModal = {
     openModal: function() {
         // When the user clicks on the button, open the modal 
         btn.onclick = function() {
-            restaurants.closeInfoWindow();
+            Gmap.closeInfoWindow();
             modal.style.display = "block";
         }
     },

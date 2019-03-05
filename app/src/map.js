@@ -12,6 +12,7 @@ var Gmap = {
     pos: null,
     photo: [],
     hasPhoto: null,
+    sortBy: document.getElementById('sort'),
     infoWindowSmall: null,
 
     init: function() {
@@ -35,6 +36,7 @@ var Gmap = {
                 Gmap.nearBySearchRestaurants();
                 Gmap.autoComplete();
                 Gmap.map.addListener('dragend', Gmap.mapDragged);
+                Gmap.sortByRating();
         
             }, Gmap.onLocationError)
         }else {
@@ -96,6 +98,7 @@ var Gmap = {
     //If map is dreagged search again for restaurants in the vicinity
     mapDragged: function() {
         Restaurant.googleRestaurants = [];
+        Gmap.sortBy.value = 'allStars';
         Gmap.search();
     },
 
@@ -116,7 +119,7 @@ var Gmap = {
     //When the user selects a city, get the place details for the city
     onPlaceChanged: function() {
         Restaurant.googleRestaurants = [];
-
+        Gmap.sortBy.value = 'allStars';
         var place = autocomplete.getPlace();
         if (place.geometry) {
             Gmap.map.panTo(place.geometry.location);
@@ -158,31 +161,8 @@ var Gmap = {
                     //google.maps.event.addListener(markers[i], 'click', restaurants.showInfoWindow);
                     //google.maps.event.addListener(map, "click", restaurants.closeInfoWindow);
     
-                    var sort3Star = false, sort4Star = false, sort5Star = false, sortAsc = false, sortDesc = false;
-                    if (sort3Star) {
-                        if (Math.round(results[i].rating) <= 3) {
-                            Gmap.addResultsAndMarkers(i, results, i);
-                        }
-                    } else if (sort4Star) {
-                        if (Math.round(results[i].rating) === 4) {
-                            Gmap.addResultsAndMarkers(i, results, i);
-                        }
-                    } else if (sort5Star) {
-                        if (Math.round(results[i].rating) === 5) {
-                            Gmap.addResultsAndMarkers(i, results, i);
-                        }
-                    } else {
-                        if (sortAsc) {
-                            results.sort(function (a, b) {
-                                return b.rating - a.rating;
-                            });
-                        } else if (sortDesc) {
-                            results.sort(function (a, b) {
-                                return a.rating - b.rating;
-                            });
-                        }
-                        Gmap.addResultsAndMarkers(i, results, i);
-                    }
+                    Gmap.sortRestaurants(i, results, i);
+                    
                 }
             }    
             
@@ -275,6 +255,79 @@ var Gmap = {
                     </div>`;
         listDiv.insertAdjacentHTML("beforeEnd", details);
         resultsDiv.appendChild(listDiv);
+    },
+
+    sortRestaurants: function(i, results, i) {
+        var sort3Star = false, sort4Star = false, sort5Star = false, sortAsc = false, sortDesc = false;
+                    if (sort3Star) {
+                        if (Math.round(results[i].rating) <= 3) {
+                            Gmap.addResultsAndMarkers(i, results, i);
+                        }
+                    } else if (sort4Star) {
+                        if (Math.round(results[i].rating) === 4) {
+                            Gmap.addResultsAndMarkers(i, results, i);
+                        }
+                    } else if (sort5Star) {
+                        if (Math.round(results[i].rating) === 5) {
+                            Gmap.addResultsAndMarkers(i, results, i);
+                        }
+                    } else {
+                        if (sortAsc) {
+                            results.sort(function (a, b) {
+                                return b.rating - a.rating;
+                            });
+                        } else if (sortDesc) {
+                            results.sort(function (a, b) {
+                                return a.rating - b.rating;
+                            });
+                        }
+                        Gmap.addResultsAndMarkers(i, results, i);
+                    }
+    },
+
+    restSort: function() {
+        sortAsc = false;
+        sortDesc = false;
+        sort4Star = false;
+        sort3Star = false;
+        sort5Star = false;
+        allStars = false;
+    },
+
+    sortByRating: function() { 
+        //Event listener for sort by star rating
+        Gmap.sortBy.addEventListener('change', function () {
+            if (Gmap.sortBy.value === 'sortAsc') {
+                Gmap.restSort();
+                sortAsc = true;
+                Gmap.search();
+    
+            } else if (Gmap.sortBy.value === 'sortDesc') {
+                Gmap.restSort();
+                sortDesc = true;
+                Gmap.search();
+            }
+            else if (Gmap.sortBy.value === 'sort4Star') {
+                Gmap.restSort();
+                sort4Star = true;
+                Gmap.search();
+            }
+            else if (Gmap.sortBy.value === 'sort3Star') {
+                Gmap.restSort();
+                sort3Star = true;
+                Gmap.search();
+            }
+            else if (Gmap.sortBy.value === 'sort5Star') {
+                Gmap.restSort();
+                sort5Star = true;
+                Gmap.search();
+            }
+            else if (Gmap.sortBy.value === 'allStars') {
+                Gmap.restSort();
+                allStars = true;
+                Gmap.search();
+            }
+        });
     },
 
     //Builds the small info Window
