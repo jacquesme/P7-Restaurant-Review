@@ -245,6 +245,7 @@ var Gmap = {
         listDiv.onclick = function () {
             google.maps.event.trigger(Restaurant.markers[i], 'click');
         };
+    
         var details = `<div class="placeIcon"><img src ="${Gmap.createPhoto(result)}" /></div>
                         <div class="placeDetails">
                         <div class="name">${result.name}</div>`;
