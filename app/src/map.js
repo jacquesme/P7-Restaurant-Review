@@ -269,30 +269,30 @@ var Gmap = {
 
     sortRestaurants: function(i, results, i) {
         var sort3Star = false, sort4Star = false, sort5Star = false, sortAsc = false, sortDesc = false;
-                    if (sort3Star) {
-                        if (Math.round(results[i].rating) <= 3) {
-                            Gmap.addResultsAndMarkers(i, results, i);
-                        }
-                    } else if (sort4Star) {
-                        if (Math.round(results[i].rating) === 4) {
-                            Gmap.addResultsAndMarkers(i, results, i);
-                        }
-                    } else if (sort5Star) {
-                        if (Math.round(results[i].rating) === 5) {
-                            Gmap.addResultsAndMarkers(i, results, i);
-                        }
-                    } else {
-                        if (sortAsc) {
-                            results.sort(function (a, b) {
-                                return b.rating - a.rating;
-                            });
-                        } else if (sortDesc) {
-                            results.sort(function (a, b) {
-                                return a.rating - b.rating;
-                            });
-                        }
-                        Gmap.addResultsAndMarkers(i, results, i);
-                    }
+        if (sort3Star) {
+            if (Math.round(results[i].rating) <= 3) {
+                Gmap.addResultsAndMarkers(i, results, i);
+            }
+        } else if (sort4Star) {
+            if (Math.round(results[i].rating) === 4) {
+                Gmap.addResultsAndMarkers(i, results, i);
+            }
+        } else if (sort5Star) {
+            if (Math.round(results[i].rating) === 5) {
+                Gmap.addResultsAndMarkers(i, results, i);
+            }
+        } else {
+            if (sortAsc) {
+                results.sort(function (a, b) {
+                    return b.rating - a.rating;
+                });
+            } else if (sortDesc) {
+                results.sort(function (a, b) {
+                    return a.rating - b.rating;
+                });
+            }
+            Gmap.addResultsAndMarkers(i, results, i);
+        }
     },
 
     sortByRating: function() { 
