@@ -13,6 +13,11 @@ var Gmap = {
     photo: [],
     hasPhoto: null,
     sortBy: document.getElementById('sort'),
+    sort3Star: false, 
+    sort4Star: false, 
+    sort5Star: false, 
+    sortAsc: false, 
+    sortDesc: false,
     infoWindowSmall: null,
 
     init: function() {
@@ -268,25 +273,25 @@ var Gmap = {
     },
 
     sortRestaurants: function(i, results, i) {
-        var sort3Star = false, sort4Star = false, sort5Star = false, sortAsc = false, sortDesc = false;
-        if (sort3Star) {
+        
+        if (Gmap.sort3Star) {
             if (Math.round(results[i].rating) <= 3) {
                 Gmap.addResultsAndMarkers(i, results, i);
             }
-        } else if (sort4Star) {
+        } else if (Gmap.sort4Star) {
             if (Math.round(results[i].rating) === 4) {
                 Gmap.addResultsAndMarkers(i, results, i);
             }
-        } else if (sort5Star) {
+        } else if (Gmap.sort5Star) {
             if (Math.round(results[i].rating) === 5) {
                 Gmap.addResultsAndMarkers(i, results, i);
             }
         } else {
-            if (sortAsc) {
+            if (Gmap.sortAsc) {
                 results.sort(function (a, b) {
                     return b.rating - a.rating;
                 });
-            } else if (sortDesc) {
+            } else if (Gmap.sortDesc) {
                 results.sort(function (a, b) {
                     return a.rating - b.rating;
                 });
@@ -295,37 +300,37 @@ var Gmap = {
         }
     },
 
+    //Event listener for sort by star rating
     sortByRating: function() { 
-        //Event listener for sort by star rating
         Gmap.sortBy.addEventListener('change', function () {
             if (Gmap.sortBy.value === 'sortAsc') {
                 Gmap.restSort();
-                sortAsc = true;
+                Gmap.sortAsc = true;
                 Gmap.search();
     
             } else if (Gmap.sortBy.value === 'sortDesc') {
                 Gmap.restSort();
-                sortDesc = true;
+                Gmap.sortDesc = true;
                 Gmap.search();
             }
             else if (Gmap.sortBy.value === 'sort4Star') {
                 Gmap.restSort();
-                sort4Star = true;
+                Gmap.sort4Star = true;
                 Gmap.search();
             }
             else if (Gmap.sortBy.value === 'sort3Star') {
                 Gmap.restSort();
-                sort3Star = true;
+                Gmap.sort3Star = true;
                 Gmap.search();
             }
             else if (Gmap.sortBy.value === 'sort5Star') {
                 Gmap.restSort();
-                sort5Star = true;
+                Gmap.sort5Star = true;
                 Gmap.search();
             }
             else if (Gmap.sortBy.value === 'allStars') {
                 Gmap.restSort();
-                allStars = true;
+                Gmap.allStars = true;
                 Gmap.search();
             }
         });
