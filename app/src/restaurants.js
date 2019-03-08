@@ -17,8 +17,8 @@ var Restaurant = {
             //Gmap.addRightHandResults(Restaurant.googleRestaurants[index]);
         })
 
-        console.log('Loading restaurant places .. ')
-        console.log(Restaurant.googleRestaurants)
+        //console.log('Loading restaurant places .. ')
+        //console.log(Restaurant.googleRestaurants)
     }
 
 } 
