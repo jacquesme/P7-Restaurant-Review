@@ -258,6 +258,15 @@ var Gmap = {
         resultsDiv.appendChild(listDiv);
     },
 
+    restSort: function() {
+        sortAsc = false;
+        sortDesc = false;
+        sort4Star = false;
+        sort3Star = false;
+        sort5Star = false;
+        allStars = false;
+    },
+
     sortRestaurants: function(i, results, i) {
         var sort3Star = false, sort4Star = false, sort5Star = false, sortAsc = false, sortDesc = false;
                     if (sort3Star) {
@@ -284,15 +293,6 @@ var Gmap = {
                         }
                         Gmap.addResultsAndMarkers(i, results, i);
                     }
-    },
-
-    restSort: function() {
-        sortAsc = false;
-        sortDesc = false;
-        sort4Star = false;
-        sort3Star = false;
-        sort5Star = false;
-        allStars = false;
     },
 
     sortByRating: function() { 
