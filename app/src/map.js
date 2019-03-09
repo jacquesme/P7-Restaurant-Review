@@ -165,7 +165,7 @@ var Gmap = {
                     // If the user clicks a restaurant marker, show the details of that restaurant
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseover', Gmap.showInfoWindowSmall);
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseout', Gmap.closeInfoWindowSmall);
-                    google.maps.event.addListener(markers[i], 'click', restaurants.showInfoWindow);
+                    google.maps.event.addListener(Restaurant.markers[i], 'click', Gmap.showInfoWindow);
                     //google.maps.event.addListener(map, "click", restaurants.closeInfoWindow);
     
                     Gmap.sortRestaurants(i, results, i);
@@ -414,7 +414,7 @@ var Gmap = {
 
     //Builds the bigger info Window
     buildIWContent: function(place) {
-        document.getElementById('iw-icon').innerHTML = '<img class="photo" ' + 'src="' + restaurants.createPhoto(place) + '"/>';
+        document.getElementById('iw-icon').innerHTML = '<img class="photo" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
         document.getElementById('iw-url').innerHTML = '<b><a href="#restaurant-info">' + place.name + '</a></b>';
         document.getElementById('iw-address').textContent = place.vicinity;
         if (place.formatted_phone_number) {
@@ -459,9 +459,9 @@ var Gmap = {
         document.getElementById('iw-reviews').textContent = 'See Reviews'
     },
 
+    //Displays extra info below when restaurant is clicked
     displayRestaurantInfo: function(place) {
-        //Displays extra info below when restaurant is clicked
-        restaurants.showTheForm();
+        //restaurants.showTheForm();
         restaurantInfoDiv.style.display = "block";
         document.getElementById('name').textContent = place.name;
         document.getElementById('address').textContent = place.vicinity;
