@@ -161,10 +161,11 @@ var Gmap = {
                         icon: Gmap.createMarker(Restaurant.googleRestaurants[i]),
                         //zIndex: 52,
                     });
+
                     // If the user clicks a restaurant marker, show the details of that restaurant
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseover', Gmap.showInfoWindowSmall);
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseout', Gmap.closeInfoWindowSmall);
-                    //google.maps.event.addListener(markers[i], 'click', restaurants.showInfoWindow);
+                    google.maps.event.addListener(markers[i], 'click', restaurants.showInfoWindow);
                     //google.maps.event.addListener(map, "click", restaurants.closeInfoWindow);
     
                     Gmap.sortRestaurants(i, results, i);
@@ -339,9 +340,9 @@ var Gmap = {
 
     //Builds the small info Window
     createInfoWindow: function(){
-        /*infoWindow = new google.maps.InfoWindow({
+        infoWindow = new google.maps.InfoWindow({
         content: document.getElementById('info-content')
-        });*/
+        });
         infoWindowSmall = new google.maps.InfoWindow({
             content: document.getElementById('info-content-small'),
         });
@@ -349,13 +350,13 @@ var Gmap = {
             content: document.getElementById('info-content-new-restaurant'),
         });*/
 
-        //infoWindow.setPosition(pos); 
+        infoWindow.setPosition(pos); 
     },
 
     //Shows the info window with details of the restaurant
     showInfoWindowSmall: function() {
         var places = new google.maps.places.PlacesService(Gmap.map);
-        //restaurants.closeInfoWindow();
+        Gmap.closeInfoWindow();
         var marker = this;
         places.getDetails({
             placeId: marker.placeResult.place_id
@@ -392,6 +393,169 @@ var Gmap = {
     closeInfoWindowSmall: function() {
         var marker = this;
         infoWindowSmall.close(Gmap.map, marker);
+    },
+
+    showInfoWindow: function() {
+        //Shows the info window with details of the restaurant
+        const places = new google.maps.places.PlacesService(Gmap.map);
+        Gmap.closeInfoWindowSmall();
+        var marker = this;
+        places.getDetails({
+            placeId: marker.placeResult.place_id
+        }, function(place, status) {
+            if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                return;
+            }
+            infoWindow.open(Gmap.map, marker);
+            Gmap.buildIWContent(place);
+            Gmap.displayRestaurantInfo(place);
+        });                    
+    },
+
+    //Builds the bigger info Window
+    buildIWContent: function(place) {
+        document.getElementById('iw-icon').innerHTML = '<img class="photo" ' + 'src="' + restaurants.createPhoto(place) + '"/>';
+        document.getElementById('iw-url').innerHTML = '<b><a href="#restaurant-info">' + place.name + '</a></b>';
+        document.getElementById('iw-address').textContent = place.vicinity;
+        if (place.formatted_phone_number) {
+            document.getElementById('iw-phone').style.display = '';
+            document.getElementById('iw-phone').textContent = place.formatted_phone_number;
+        } else {
+            document.getElementById('iw-phone').style.display = 'none';
+        }
+        if (place.rating) {
+            var ratingHtml = '';
+            for (var i = 0; i < 5; i++) {
+                if (place.rating < (i + 0.5)) {
+                    ratingHtml += '&#10025;';
+                } else {
+                    ratingHtml += '&#10029;';
+                }
+                document.getElementById('iw-rating').style.display = '';
+                document.getElementById('iw-rating').innerHTML = ratingHtml;
+            }
+        } else {
+            document.getElementById('iw-rating').style.display = 'none';
+        }
+        if (place.website) {
+            var website = hostnameRegexp.exec(place.website);
+            if (website === null) {
+                website = 'http://' + place.website + '/';
+            }
+            document.getElementById('iw-website').style.display = '';
+            document.getElementById('iw-website').innerHTML = '<a href="' + website + '">' + place.website + '</a>';
+    
+        } else {
+            document.getElementById('iw-website').style.display = 'none';
+        }
+        if (place.opening_hours) {
+            if (place.opening_hours.open_now) {
+                document.getElementById('iw-open').style.display = '';
+                document.getElementById('iw-open').textContent = 'Open Now';
+            } else {
+                document.getElementById('iw-open').style.display = 'none';
+            }
+        }
+        document.getElementById('iw-reviews').textContent = 'See Reviews'
+    },
+
+    displayRestaurantInfo: function(place) {
+        //Displays extra info below when restaurant is clicked
+        restaurants.showTheForm();
+        restaurantInfoDiv.style.display = "block";
+        document.getElementById('name').textContent = place.name;
+        document.getElementById('address').textContent = place.vicinity;
+        document.getElementById('telephone').textContent = place.formatted_phone_number;
+        if (place.website) {
+            let website = hostnameRegexp.exec(place.website);
+            if (website === null) {
+                website = 'http://' + place.website + '/';
+            }
+            document.getElementById('website').innerHTML = '<a href="' + website + '">Visit Restaurant Website</a>';
+        }
+        let reviewsDiv = document.getElementById('reviews');
+        let reviewHTML = '';
+        reviewsDiv.innerHTML = reviewHTML;
+        if (place.reviews) {
+            if (place.reviews.length > 0) {
+                for (let i = 0; i < place.reviews.length; i ++) {
+                    let review = place.reviews[i];
+                    let avatar;
+                    if (place.reviews[i].profile_photo_url) {
+                        avatar = place.reviews[i].profile_photo_url;
+                    } else {
+                        avatar = './image/avatar.png';
+                    }
+                    reviewHTML += `<div class="restaurant-reviews">
+                                <h3 class="review-title">
+                                    <span class="profile-photo" style="background-image: url('${avatar}')"></span>`;
+                    if(place.rating){
+                        reviewHTML +=  `<span id="review-rating" class="rating">${restaurants.starRating(review)}</span>`;
+                    }
+                    reviewHTML +=  ` </h3>
+                                        <p> ${place.reviews[i].text} </p>
+                                    </div>`;
+                    reviewsDiv.innerHTML = reviewHTML;
+                }
+            }
+        }
+    
+        /*-----------------------------------------------------------------------------------
+        adds the street view functionality
+        -------------------------------------------------------------------------------------*/
+    
+       let sv = new google.maps.StreetViewService();
+        sv.getPanorama({
+            location: place.geometry.location,
+            radius: 50
+        }, processSVData);
+    
+        const panoDiv = document.getElementById('pano');
+        const streetViewWrapper = document.getElementById('street-view-wrapper');
+        const photoDiv = document.getElementById('photo');
+        const seePhoto = document.getElementById('see-photo');
+        //const seeStreetView = document.getElementById('see-street-view');
+        photoDiv.innerHTML = '<img class="photo-big" ' + 'src="' + restaurants.createPhoto(place) + '"/>';
+    
+        streetViewWrapper.style.display = 'block';
+        photoDiv.style.display = 'none';
+        if(hasPhoto){
+            seePhoto.style.display = 'block';
+        }else{
+            seePhoto.style.display = 'none';
+        }
+    
+        function processSVData(data, status) {
+            if (status === 'OK') {
+                let panorama = new google.maps.StreetViewPanorama(panoDiv);
+                panorama.setPano(data.location.pano);
+                panorama.setPov({
+                    heading: 270,
+                    pitch: 0
+                });
+                panorama.setVisible(true);
+                
+                /*-----------------------------------------------------------------------------------
+                click photo  button and show photo hide street view
+                -------------------------------------------------------------------------------------*/
+                seePhoto.addEventListener("click", function(){
+                    seePhoto.style.display = 'none';
+                    //streetViewWrapper.style.display = 'none';
+                    photoDiv.style.display = 'block';
+                });
+    
+            } else {
+                seePhoto.style.display = 'none';
+                //streetViewWrapper.style.display = 'none';
+                photoDiv.style.display = 'block';
+            }
+        }
+    },
+
+    //Close the Bigger Info Windows
+    closeInfoWindow: function() {
+        var marker = this;
+        infoWindow.close(Gmap.map, marker);
     },
 
 }
