@@ -18,7 +18,7 @@ var Gmap = {
     sort5Star: false, 
     sortAsc: false, 
     sortDesc: false,
-    infoWindowSmall: null,
+    //infoWindowSmall: null,
 
     init: function() {
 
@@ -42,6 +42,7 @@ var Gmap = {
                 Gmap.autoComplete();
                 Gmap.map.addListener('dragend', Gmap.mapDragged);
                 Gmap.sortByRating();
+                Gmap.createInfoWindow();
         
             }, Gmap.onLocationError)
         }else {
@@ -161,8 +162,8 @@ var Gmap = {
                         //zIndex: 52,
                     });
                     // If the user clicks a restaurant marker, show the details of that restaurant
-                    //google.maps.event.addListener(markers[i], 'mouseover', restaurants.showInfoWindowSmall);
-                    //google.maps.event.addListener(markers[i], 'mouseout', restaurants.closeInfoWindowSmall);
+                    google.maps.event.addListener(Restaurant.markers[i], 'mouseover', Gmap.showInfoWindowSmall);
+                    google.maps.event.addListener(Restaurant.markers[i], 'mouseout', Gmap.closeInfoWindowSmall);
                     //google.maps.event.addListener(markers[i], 'click', restaurants.showInfoWindow);
                     //google.maps.event.addListener(map, "click", restaurants.closeInfoWindow);
     
@@ -337,8 +338,61 @@ var Gmap = {
     },
 
     //Builds the small info Window
+    createInfoWindow: function(){
+        /*infoWindow = new google.maps.InfoWindow({
+        content: document.getElementById('info-content')
+        });*/
+        infoWindowSmall = new google.maps.InfoWindow({
+            content: document.getElementById('info-content-small'),
+        });
+        /*infoWindowNew = new google.maps.InfoWindow({
+            content: document.getElementById('info-content-new-restaurant'),
+        });*/
+
+        //infoWindow.setPosition(pos); 
+    },
+
+    //Shows the info window with details of the restaurant
+    showInfoWindowSmall: function() {
+        var places = new google.maps.places.PlacesService(Gmap.map);
+        //restaurants.closeInfoWindow();
+        var marker = this;
+        places.getDetails({
+            placeId: marker.placeResult.place_id
+        }, function(place, status) {
+            if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                return;
+            }
+            infoWindowSmall.open(Gmap.map, marker);
+            Gmap.buildIWContentSmall(place);
+        });
+    },
     
-    
+    buildIWContentSmall: function(place) {
+        //Builds the small info Window
+        document.getElementById('iw-icon-small').innerHTML = '<img class="photo" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
+        document.getElementById('iw-url-small').innerHTML = '<b>' + place.name + '</b>';
+        if (place.rating) {
+            var ratingHtml = '';
+            for (var i = 0; i < 5; i++) {
+                if (place.rating < (i + 0.5)) {
+                    ratingHtml += '&#10025;';
+                } else {
+                    ratingHtml += '&#10029;';
+                }
+                document.getElementById('iw-rating-small').style.display = '';
+                document.getElementById('iw-rating-small').innerHTML = ratingHtml;
+            }
+        } else {
+            document.getElementById('iw-rating-small').style.display = 'none';
+        }
+    },
+
+    //Close the Small InfoWindow
+    closeInfoWindowSmall: function() {
+        var marker = this;
+        infoWindowSmall.close(Gmap.map, marker);
+    },
 
 }
 
