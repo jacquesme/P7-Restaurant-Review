@@ -19,6 +19,9 @@ var Gmap = {
     sortAsc: false, 
     sortDesc: false,
     hostnameRegexp: new RegExp('^https?://.+?/'),
+    restaurantInfoDiv: document.getElementById('restaurant-info'),
+    restaurantIsNew: true,
+    newPlace: [],
 
     init: function() {
 
@@ -43,6 +46,7 @@ var Gmap = {
                 Gmap.map.addListener('dragend', Gmap.mapDragged);
                 Gmap.sortByRating();
                 Gmap.createInfoWindow();
+                Gmap.rightClickNewMarker();
         
             }, Gmap.onLocationError)
         }else {
@@ -346,9 +350,9 @@ var Gmap = {
         infoWindowSmall = new google.maps.InfoWindow({
             content: document.getElementById('info-content-small'),
         });
-        /*infoWindowNew = new google.maps.InfoWindow({
+        infoWindowNew = new google.maps.InfoWindow({
             content: document.getElementById('info-content-new-restaurant'),
-        });*/
+        });
 
         infoWindow.setPosition(Gmap.pos); 
     },
@@ -464,8 +468,7 @@ var Gmap = {
     //Displays extra info below when restaurant is clicked
     displayRestaurantInfo: function(place) {
         //restaurants.showTheForm();
-        var restaurantInfoDiv = document.getElementById('restaurant-info');
-        restaurantInfoDiv.style.display = "block";
+        Gmap.restaurantInfoDiv.style.display = "block";
         document.getElementById('name').textContent = place.name;
         document.getElementById('address').textContent = place.vicinity;
         document.getElementById('telephone').textContent = place.formatted_phone_number;
@@ -509,6 +512,60 @@ var Gmap = {
     closeInfoWindow: function() {
         var marker = this;
         infoWindow.close(Gmap.map, marker);
+    },
+
+    rightClickNewMarker: function() {
+        //Right clicking could be used to add new restaurant
+        Gmap.map.addListener('rightclick', function (e) {
+            Gmap.closeInfoWindow();
+            Gmap.restaurantIsNew = true;
+            var newResNum = -1;
+            var latlng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+            var marker = new google.maps.Marker({
+                position: latlng,
+                icon: Gmap.createMarker(latlng),
+                id: newResNum + 1
+            });
+            google.maps.event.addListener(marker, 'click', Gmap.addRestaurantInfoWindow);
+            marker.setMap(Gmap.map);
+        });
+    },
+
+    addRestaurantInfoWindow: function() {
+        var marker = this;
+        if (Gmap.restaurantIsNew) {
+            infoWindowNew.open(Gmap.map, marker);
+            Gmap.buildResDetailContent(marker);
+            Restaurant.newRestaurantMarker.push(marker);
+            newResNum += 1;
+        } else {
+            infoWindow.open(Gmap.map, marker);
+            Gmap.buildIWContent(Gmap.newPlace[marker.id]);
+            Gmap.displayRestaurantInfo(Gmap.newPlace[marker.id]);
+        }
+    },
+
+    //Builds the new Restaurant info Window
+    buildResDetailContent: function(marker) {
+        Gmap.restaurantInfoDiv.style.display = "block";
+        form.style.padding = '10px';
+        form.innerHTML = `
+            <h3 class="add-res-heading">Add A Restaurant</h3>
+            <input type="text" id="res-name" name="res-name" placeholder="Restaurant Name" required/>
+            <input type="hidden" id="res-location-lat" name="res-location-lat" value="${marker.position.lat()}"/>
+            <input type="hidden" id="res-location-lng" name="res-location-lng" value="${marker.position.lng()}"/>
+            <input type="text" name="res-address" id="res-address" placeholder="Restaurant Address" required/>
+            <label for="res-rating">Rating: </label>
+            <select name="res-rating" id="res-rating" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            <input type="text" name="res-telephone" id="res-telephone" placeholder="Restaurant Telephone" />
+            <input type="text" name="res-website" id="res-website" placeholder="Restaurant Website" />
+            <button id="add-restaurant" class="button add-restaurant">Add New Restaurant</button>`;
     },
 
 }
