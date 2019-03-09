@@ -371,6 +371,7 @@ var Gmap = {
     
     buildIWContentSmall: function(place) {
         //Builds the small info Window
+        document.getElementById('info-content-small').style.display = 'block';
         document.getElementById('iw-icon-small').innerHTML = '<img class="photo" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
         document.getElementById('iw-url-small').innerHTML = '<b>' + place.name + '</b>';
         if (place.rating) {
@@ -414,6 +415,7 @@ var Gmap = {
 
     //Builds the bigger info Window
     buildIWContent: function(place) {
+        document.getElementById('info-content').style.display = 'block';
         document.getElementById('iw-icon').innerHTML = '<img class="photo" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
         document.getElementById('iw-url').innerHTML = '<b><a href="#restaurant-info">' + place.name + '</a></b>';
         document.getElementById('iw-address').textContent = place.vicinity;
