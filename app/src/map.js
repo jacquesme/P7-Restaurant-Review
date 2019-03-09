@@ -18,7 +18,7 @@ var Gmap = {
     sort5Star: false, 
     sortAsc: false, 
     sortDesc: false,
-    //infoWindowSmall: null,
+    hostnameRegexp: new RegExp('^https?://.+?/'),
 
     init: function() {
 
@@ -350,7 +350,7 @@ var Gmap = {
             content: document.getElementById('info-content-new-restaurant'),
         });*/
 
-        infoWindow.setPosition(pos); 
+        infoWindow.setPosition(Gmap.pos); 
     },
 
     //Shows the info window with details of the restaurant
@@ -438,7 +438,7 @@ var Gmap = {
             document.getElementById('iw-rating').style.display = 'none';
         }
         if (place.website) {
-            var website = hostnameRegexp.exec(place.website);
+            var website = Gmap.hostnameRegexp.exec(place.website);
             if (website === null) {
                 website = 'http://' + place.website + '/';
             }
@@ -462,25 +462,26 @@ var Gmap = {
     //Displays extra info below when restaurant is clicked
     displayRestaurantInfo: function(place) {
         //restaurants.showTheForm();
+        var restaurantInfoDiv = document.getElementById('restaurant-info');
         restaurantInfoDiv.style.display = "block";
         document.getElementById('name').textContent = place.name;
         document.getElementById('address').textContent = place.vicinity;
         document.getElementById('telephone').textContent = place.formatted_phone_number;
         if (place.website) {
-            let website = hostnameRegexp.exec(place.website);
+            var website = Gmap.hostnameRegexp.exec(place.website);
             if (website === null) {
                 website = 'http://' + place.website + '/';
             }
             document.getElementById('website').innerHTML = '<a href="' + website + '">Visit Restaurant Website</a>';
         }
-        let reviewsDiv = document.getElementById('reviews');
-        let reviewHTML = '';
+        var reviewsDiv = document.getElementById('reviews');
+        var reviewHTML = '';
         reviewsDiv.innerHTML = reviewHTML;
         if (place.reviews) {
             if (place.reviews.length > 0) {
-                for (let i = 0; i < place.reviews.length; i ++) {
-                    let review = place.reviews[i];
-                    let avatar;
+                for (var i = 0; i < place.reviews.length; i ++) {
+                    var review = place.reviews[i];
+                    var avatar;
                     if (place.reviews[i].profile_photo_url) {
                         avatar = place.reviews[i].profile_photo_url;
                     } else {
@@ -490,7 +491,7 @@ var Gmap = {
                                 <h3 class="review-title">
                                     <span class="profile-photo" style="background-image: url('${avatar}')"></span>`;
                     if(place.rating){
-                        reviewHTML +=  `<span id="review-rating" class="rating">${restaurants.starRating(review)}</span>`;
+                        reviewHTML +=  `<span id="review-rating" class="rating">${Gmap.starRating(review)}</span>`;
                     }
                     reviewHTML +=  ` </h3>
                                         <p> ${place.reviews[i].text} </p>
@@ -500,56 +501,6 @@ var Gmap = {
             }
         }
     
-        /*-----------------------------------------------------------------------------------
-        adds the street view functionality
-        -------------------------------------------------------------------------------------*/
-    
-       let sv = new google.maps.StreetViewService();
-        sv.getPanorama({
-            location: place.geometry.location,
-            radius: 50
-        }, processSVData);
-    
-        const panoDiv = document.getElementById('pano');
-        const streetViewWrapper = document.getElementById('street-view-wrapper');
-        const photoDiv = document.getElementById('photo');
-        const seePhoto = document.getElementById('see-photo');
-        //const seeStreetView = document.getElementById('see-street-view');
-        photoDiv.innerHTML = '<img class="photo-big" ' + 'src="' + restaurants.createPhoto(place) + '"/>';
-    
-        streetViewWrapper.style.display = 'block';
-        photoDiv.style.display = 'none';
-        if(hasPhoto){
-            seePhoto.style.display = 'block';
-        }else{
-            seePhoto.style.display = 'none';
-        }
-    
-        function processSVData(data, status) {
-            if (status === 'OK') {
-                let panorama = new google.maps.StreetViewPanorama(panoDiv);
-                panorama.setPano(data.location.pano);
-                panorama.setPov({
-                    heading: 270,
-                    pitch: 0
-                });
-                panorama.setVisible(true);
-                
-                /*-----------------------------------------------------------------------------------
-                click photo  button and show photo hide street view
-                -------------------------------------------------------------------------------------*/
-                seePhoto.addEventListener("click", function(){
-                    seePhoto.style.display = 'none';
-                    //streetViewWrapper.style.display = 'none';
-                    photoDiv.style.display = 'block';
-                });
-    
-            } else {
-                seePhoto.style.display = 'none';
-                //streetViewWrapper.style.display = 'none';
-                photoDiv.style.display = 'block';
-            }
-        }
     },
 
     //Close the Bigger Info Windows
