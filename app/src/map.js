@@ -9,19 +9,21 @@ var Gmap = {
         streetViewControl: false
     },
     request: new XMLHttpRequest(),
-    pos: null,
+    newResNum: null,
+    newPlace: [],
     photo: [],
     hasPhoto: null,
-    sortBy: document.getElementById('sort'),
+    pos: null,
+    restaurantIsNew: true,
     sort3Star: false, 
     sort4Star: false, 
-    sort5Star: false, 
-    sortAsc: false, 
-    sortDesc: false,
-    hostnameRegexp: new RegExp('^https?://.+?/'),
+    sort5Star: false,
+    sortDesc: false, 
+    sortAsc: false,  
     restaurantInfoDiv: document.getElementById('restaurant-info'),
-    restaurantIsNew: true,
-    newPlace: [],
+    form: document.getElementById('form-add-restaurant'),
+    hostnameRegexp: new RegExp('^https?://.+?/'),
+    sortBy: document.getElementById('sort'),
 
     init: function() {
 
@@ -519,12 +521,12 @@ var Gmap = {
         Gmap.map.addListener('rightclick', function (e) {
             Gmap.closeInfoWindow();
             Gmap.restaurantIsNew = true;
-            var newResNum = -1;
+            Gmap.newResNum = -1;
             var latlng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
             var marker = new google.maps.Marker({
                 position: latlng,
                 icon: Gmap.createMarker(latlng),
-                id: newResNum + 1
+                id: Gmap.newResNum + 1
             });
             google.maps.event.addListener(marker, 'click', Gmap.addRestaurantInfoWindow);
             marker.setMap(Gmap.map);
@@ -537,7 +539,7 @@ var Gmap = {
             infoWindowNew.open(Gmap.map, marker);
             Gmap.buildResDetailContent(marker);
             Restaurant.newRestaurantMarker.push(marker);
-            newResNum += 1;
+            Gmap.newResNum += 1;
         } else {
             infoWindow.open(Gmap.map, marker);
             Gmap.buildIWContent(Gmap.newPlace[marker.id]);
@@ -547,9 +549,10 @@ var Gmap = {
 
     //Builds the new Restaurant info Window
     buildResDetailContent: function(marker) {
+    
         Gmap.restaurantInfoDiv.style.display = "block";
-        form.style.padding = '10px';
-        form.innerHTML = `
+        Gmap.form.style.padding = '10px';
+        Gmap.form.innerHTML = `
             <h3 class="add-res-heading">Add A Restaurant</h3>
             <input type="text" id="res-name" name="res-name" placeholder="Restaurant Name" required/>
             <input type="hidden" id="res-location-lat" name="res-location-lat" value="${marker.position.lat()}"/>
