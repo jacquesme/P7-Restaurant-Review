@@ -51,6 +51,7 @@ var Gmap = {
                 Gmap.rightClickNewMarker();
                 Gmap.submitAddRestaurant();
                 Gmap.addTopReview();
+                myModal.loadModal();
         
             }, Gmap.onLocationError)
         }else {
