@@ -49,6 +49,7 @@ var Gmap = {
                 Gmap.sortByRating();
                 Gmap.createInfoWindow();
                 Gmap.rightClickNewMarker();
+                Gmap.submitAddRestaurant();
         
             }, Gmap.onLocationError)
         }else {
@@ -570,6 +571,120 @@ var Gmap = {
             <input type="text" name="res-website" id="res-website" placeholder="Restaurant Website" />
             <button id="add-restaurant" class="button add-restaurant">Add New Restaurant</button>`;
     },
+
+    //Create new restaurant with name, address, star rating, web address and phone number
+    submitAddRestaurant: function() {
+        
+        document.getElementById("form-add-restaurant").addEventListener("submit", function (e) {
+            e.preventDefault();
+            Gmap.form.style.padding = '';
+            var name = document.getElementById('res-name');
+            var address = document.getElementById('res-address');
+            var telephone = document.getElementById('res-telephone');
+            var website = document.getElementById('res-website');
+            var rating = document.getElementById('res-rating');
+            var locationLat = document.getElementById('res-location-lat');
+            var locationLng = document.getElementById('res-location-lng');
+
+            var position = new google.maps.LatLng(locationLat.value, locationLng.value);
+            var foodImg = 'app/assets/images/food.png';
+            var place = {
+                name: name.value,
+                vicinity: address.value,
+                website: website.value,
+                url: website.value,
+                formatted_phone_number: telephone.value,
+                rating: rating.value,
+                position: position,
+                geometry: {location: position},
+                icon: foodImg,
+                reviews: '',
+                photos: '',
+
+            };
+    
+            //Pushes to array so that it knows which new restaurant to open when you add more than one
+            Gmap.newPlace.push(place);
+            Gmap.closeInfoWindowNew();
+            var marker = Restaurant.newRestaurantMarker[Gmap.newResNum];
+            Gmap.restaurantIsNew = false;
+            infoWindow.open(Gmap.map, marker);
+            Gmap.buildIWContent(place);
+            Gmap.displayRestaurantInfo(place);
+
+        }, function (error) {
+            var loadingDiv= document.getElementById('loading');
+            if(error.code === 0){
+            loadingDiv.innerHTML = "An unknown error occurred.";
+            } else if(error.code === 1) {
+                loadingDiv.innerHTML = "User denied the request for Geolocation. Refresh the broswer and allow Geolocation";
+            } else if(error.code === 2) {
+                loadingDiv.innerHTML = "Location information is unavailable.";
+            } else if(error.code === 3) {
+                loadingDiv.innerHTML = "The request to get user location timed out.";
+            }
+            handleLocationError(true, infoWindow, Gmap.map.getCenter(pos));
+        },
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(Gmap.map);
+
+        });
+    },
+
+    //Close the New InfoWindow
+    closeInfoWindowNew: function() {
+        var marker = this;
+        infoWindowNew.close(Gmap.map, marker);
+    },
+
+    //Form functionality on submit add new review to top of reviews and save to array
+    addTopReview: function() {
+        
+        document.getElementById("add-review").addEventListener("submit", function (e) {
+            e.preventDefault();
+            var newName = document.getElementById("your-name");
+            var newRating = document.getElementById("your-rating");
+            var newReview = document.getElementById("your-review");
+            if (!(newName.value && newRating.value && newReview.value)) { //if not empty return
+                return;
+            }
+            Gmap.addReview(newName.value, newRating.value, newReview.value); //add to array values from form
+            newName.value = ""; //reset form values to 0
+            newRating.value = "";
+            newReview.value = "";
+            Gmap.hideTheForm(); //hide form and add button
+        });
+    },
+
+    addReview: function(newName, newRating, newReview) { //add to array and to the page
+        var newReviewDetails = {
+            name: newName,
+            rating: newRating,
+            review: newReview,
+        };
+        var avatar = 'app/assets/images/avatar.png';
+        var reviewsDiv = document.getElementById('reviews');
+        var newReviewHTML = '';
+        newReviewHTML += `<div class="restaurant-reviews">
+                            <h3 class="review-title">
+                            <span class="profile-photo" style="background-image: url('${avatar}')"></span>
+                            <span id="review-rating" class="rating">${Gmap.starRating(newReviewDetails)}</span>
+                            </h3>
+                            <p> ${newReviewDetails.review} </p>
+                        </div>`;
+        Restaurant.newReviewArray.push(newReviewDetails); //push new values to array to store them
+        reviewsDiv.insertAdjacentHTML("afterbegin", newReviewHTML); //add to the top of content
+    },
+
+    // Hides the form for the restaurant reviews
+    hideTheForm: function() {
+        document.getElementById("form-wrapper").style.display = 'none';
+    },
+        
 
 }
 

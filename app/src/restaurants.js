@@ -3,6 +3,7 @@ var Restaurant = {
     googleRestaurants: [],
     markers: [],
     newRestaurantMarker: [],
+    newReviewArray: [],
     
     loadRestaurants: function () {
         Gmap.request.open('GET', 'http://localhost:3000/results', true); // Replace 'my_data' with the path to your file
