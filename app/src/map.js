@@ -50,6 +50,7 @@ var Gmap = {
                 Gmap.createInfoWindow();
                 Gmap.rightClickNewMarker();
                 Gmap.submitAddRestaurant();
+                Gmap.addTopReview();
         
             }, Gmap.onLocationError)
         }else {
@@ -470,7 +471,7 @@ var Gmap = {
 
     //Displays extra info below when restaurant is clicked
     displayRestaurantInfo: function(place) {
-        //restaurants.showTheForm();
+        Gmap.showTheForm();
         Gmap.restaurantInfoDiv.style.display = "block";
         document.getElementById('name').textContent = place.name;
         document.getElementById('address').textContent = place.vicinity;
@@ -678,6 +679,11 @@ var Gmap = {
                         </div>`;
         Restaurant.newReviewArray.push(newReviewDetails); //push new values to array to store them
         reviewsDiv.insertAdjacentHTML("afterbegin", newReviewHTML); //add to the top of content
+    },
+
+    // Shows the form for the restaurant reviews
+    showTheForm: function() {
+        document.getElementById("form-wrapper").style.display = 'block';
     },
 
     // Hides the form for the restaurant reviews
