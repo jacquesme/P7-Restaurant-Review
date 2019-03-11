@@ -378,8 +378,8 @@ var Gmap = {
         });
     },
     
+    //Builds the small info Window
     buildIWContentSmall: function(place) {
-        //Builds the small info Window
         document.getElementById('info-content-small').style.display = 'block';
         document.getElementById('iw-icon-small').innerHTML = '<img class="photo" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
         document.getElementById('iw-url-small').innerHTML = '<b>' + place.name + '</b>';
@@ -510,6 +510,18 @@ var Gmap = {
                 }
             }
         }
+        var seePhoto = document.getElementById('see-photo');
+        var photoDiv = document.getElementById('photo');
+        photoDiv.innerHTML = '<img class="photo-big" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
+
+        photoDiv.style.display = 'none';
+        if(Gmap.hasPhoto){
+            seePhoto.style.display = 'block';
+        }else{
+            seePhoto.style.display = 'none';
+        }
+
+        
     
     },
 
@@ -519,8 +531,8 @@ var Gmap = {
         infoWindow.close(Gmap.map, marker);
     },
 
+    //Right clicking could be used to add new restaurant
     rightClickNewMarker: function() {
-        //Right clicking could be used to add new restaurant
         Gmap.map.addListener('rightclick', function (e) {
             Gmap.closeInfoWindow();
             Gmap.restaurantIsNew = true;
@@ -531,6 +543,7 @@ var Gmap = {
                 icon: Gmap.createMarker(latlng),
                 id: Gmap.newResNum + 1
             });
+
             google.maps.event.addListener(marker, 'click', Gmap.addRestaurantInfoWindow);
             marker.setMap(Gmap.map);
         });
