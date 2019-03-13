@@ -159,6 +159,7 @@ var Gmap = {
                 Gmap.clearMarkers();
     
                 Restaurant.googleRestaurants = [];
+                Restaurant.getPlaces();
                 for (var i = 0; i < results.length; i++) {
                     Restaurant.googleRestaurants.push(results[i]);
                 }

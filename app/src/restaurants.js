@@ -15,8 +15,8 @@ var Restaurant = {
         Restaurant.googleRestaurants = JSON.parse(Gmap.request.responseText);
         Restaurant.googleRestaurants.forEach(function (results, index) {
             Restaurant.googleRestaurants[index] = results;
-            //Gmap.createMarker(Restaurant.googleRestaurants[index].geometry.location.lat, Restaurant.googleRestaurants[index].geometry.location.lng);
-            //Gmap.addRightHandResults(Restaurant.googleRestaurants[index]);
+            Gmap.createMarker(Restaurant.googleRestaurants[index].geometry.location.lat, Restaurant.googleRestaurants[index].geometry.location.lng);
+            Gmap.addRightHandResults(Restaurant.googleRestaurants[index]);
         })
 
         //console.log('Loading restaurant places .. ')
