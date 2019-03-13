@@ -159,7 +159,6 @@ var Gmap = {
                 Gmap.clearMarkers();
     
                 Restaurant.googleRestaurants = [];
-                Restaurant.getPlaces();
                 for (var i = 0; i < results.length; i++) {
                     Restaurant.googleRestaurants.push(results[i]);
                 }
@@ -176,7 +175,7 @@ var Gmap = {
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseover', Gmap.showInfoWindowSmall);
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseout', Gmap.closeInfoWindowSmall);
                     google.maps.event.addListener(Restaurant.markers[i], 'click', Gmap.showInfoWindow);
-                    //google.maps.event.addListener(map, "click", restaurants.closeInfoWindow);
+                    google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
     
                     Gmap.sortRestaurants(i, results, i);
                     
