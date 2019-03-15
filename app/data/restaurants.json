@@ -2,9 +2,9 @@
     "results": [
 
         {   "geometry": {
-            "location": {
-                "lat": 47.093582, 
-                "lng":37.539225
+                "location": {
+                    "lat": 47.093582, 
+                    "lng":37.539225
                 }
             },
             "icon": "./image/food.png",
@@ -25,9 +25,9 @@
             "place_id": "0"
         },
         {   "geometry": {
-            "location": {
-                "lat":47.095826, 
-                "lng":37.539634
+                "location": {
+                    "lat":47.095826, 
+                    "lng":37.539634
                 }
             },
             "icon": "./image/food.png",

@@ -162,6 +162,7 @@ var Gmap = {
                 for (var i = 0; i < results.length; i++) {
                     Restaurant.googleRestaurants.push(results[i]);
                 }
+                
                 for (var i = 0; i < results.length; i++) {
                     Restaurant.markers[i] = new google.maps.Marker({
                         position: results[i].geometry.location,
@@ -170,6 +171,7 @@ var Gmap = {
                         icon: Gmap.createMarker(Restaurant.googleRestaurants[i]),
                         //zIndex: 52,
                     });
+
 
                     // If the user clicks a restaurant marker, show the details of that restaurant
                     google.maps.event.addListener(Restaurant.markers[i], 'mouseover', Gmap.showInfoWindowSmall);
@@ -180,6 +182,26 @@ var Gmap = {
                     Gmap.sortRestaurants(i, results, i);
                     
                 }
+
+                for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
+                    Restaurant.markers[Restaurant.myRestaurants.length +i] = new google.maps.Marker({
+                        position: Restaurant.myRestaurants[i].geometry.location,
+                        placeId: Restaurant.myRestaurants[i].id,
+                        icon: Gmap.createMarker(Restaurant.myRestaurants[i]),
+                        zIndex: 52,
+                        id: Restaurant.myRestaurants[i].id,
+                    });
+
+                    Gmap.addRightHandResults(Restaurant.myRestaurants[i]);
+
+                    // If the user clicks a restaurant marker, show the details of that restaurant
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseover', Gmap.showInfoWindowSmallMy);
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
+                    google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
+
+                    Gmap.sortRestaurants(i, results, i);
+                }    
             }    
             
         })
@@ -376,6 +398,23 @@ var Gmap = {
             infoWindowSmall.open(Gmap.map, marker);
             Gmap.buildIWContentSmall(place);
         });
+    },
+
+    //Shows the info window with details of the restaurant
+    showInfoWindowMy: function() {
+        Gmap.closeInfoWindowSmall();
+        var marker = this;
+        infoWindow.open(Gmap.map, marker);
+        Gmap.buildIWContent(Restaurant.myRestaurants[marker.id]);
+        Gmap.displayRestaurantInfo(Restaurant.myRestaurants[marker.id]);
+    },
+    
+    //Shows the info window with details of the restaurant
+    showInfoWindowSmallMy: function() {
+        Gmap.closeInfoWindowSmall();
+        var marker = this;
+        infoWindowSmall.open(Gmap.map, marker);
+        Gmap.buildIWContentSmall(Restaurant.myRestaurants[marker.id]);
     },
     
     //Builds the small info Window

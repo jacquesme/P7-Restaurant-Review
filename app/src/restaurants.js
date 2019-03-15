@@ -1,5 +1,5 @@
 var Restaurant = {
-    myRestaurantsPos: {},
+    myRestaurants: [],
     googleRestaurants: [],
     markers: [],
     newRestaurantMarker: [],
@@ -12,15 +12,15 @@ var Restaurant = {
     },
 
     getPlaces: function () {
-        Restaurant.googleRestaurants = JSON.parse(Gmap.request.responseText);
-        Restaurant.googleRestaurants.forEach(function (results, index) {
-            Restaurant.googleRestaurants[index] = results;
-            Gmap.createMarker(Restaurant.googleRestaurants[index].geometry.location.lat, Restaurant.googleRestaurants[index].geometry.location.lng);
-            Gmap.addRightHandResults(Restaurant.googleRestaurants[index]);
-        })
+        Restaurant.myRestaurants = JSON.parse(Gmap.request.responseText);
+        //Restaurant.myRestaurants.forEach(function (results, index) {
+            //Restaurant.myRestaurants[index] = results;
+            //Gmap.createMarker(Restaurant.myRestaurants[index].geometry.location.lat, Restaurant.myRestaurants[index].geometry.location.lng);
+            //Gmap.addRightHandResults(Restaurant.myRestaurants[index]);
+        //})
 
-        //console.log('Loading restaurant places .. ')
-        //console.log(Restaurant.googleRestaurants)
+        console.log('Loading restaurant places .. ')
+        console.log(Restaurant.myRestaurants)
     }
 
 } 
