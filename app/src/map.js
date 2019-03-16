@@ -179,29 +179,10 @@ var Gmap = {
                     google.maps.event.addListener(Restaurant.markers[i], 'click', Gmap.showInfoWindow);
                     google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
     
-                    Gmap.sortRestaurants(i, results, i);
-                    
+                    Gmap.sortRestaurants(i, results, i);   
                 }
-
-                for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
-                    Restaurant.markers[Restaurant.myRestaurants.length +i] = new google.maps.Marker({
-                        position: Restaurant.myRestaurants[i].geometry.location,
-                        placeId: Restaurant.myRestaurants[i].id,
-                        icon: Gmap.createMarker(Restaurant.myRestaurants[i]),
-                        zIndex: 52,
-                        id: Restaurant.myRestaurants[i].id,
-                    });
-
-                    Gmap.addRightHandResults(Restaurant.myRestaurants[i]);
-
-                    // If the user clicks a restaurant marker, show the details of that restaurant
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseover', Gmap.showInfoWindowSmallMy);
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
-                    google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
-
-                    Gmap.sortRestaurants(i, results, i);
-                }    
+                
+                Restaurant.getPlaces();
             }    
             
         })

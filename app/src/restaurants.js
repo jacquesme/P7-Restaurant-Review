@@ -13,11 +13,23 @@ var Restaurant = {
 
     getPlaces: function () {
         Restaurant.myRestaurants = JSON.parse(Gmap.request.responseText);
-        //Restaurant.myRestaurants.forEach(function (results, index) {
-            //Restaurant.myRestaurants[index] = results;
-            //Gmap.createMarker(Restaurant.myRestaurants[index].geometry.location.lat, Restaurant.myRestaurants[index].geometry.location.lng);
-            //Gmap.addRightHandResults(Restaurant.myRestaurants[index]);
-        //})
+        /*Restaurant.myRestaurants.forEach(function (results, index) {
+            Restaurant.myRestaurants[index] = results;
+            Gmap.createMarker(Restaurant.myRestaurants[index].geometry.location.lat, Restaurant.myRestaurants[index].geometry.location.lng);
+            Gmap.addRightHandResults(Restaurant.myRestaurants[index]);
+        })*/
+        for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
+            Restaurant.markers[Restaurant.myRestaurants.length +i] = new google.maps.Marker({
+                position: Restaurant.myRestaurants[i].geometry.location,
+                placeId: Restaurant.myRestaurants[i].id,
+                icon: Gmap.createMarker(Restaurant.myRestaurants[i]),
+                zIndex: 52,
+                id: Restaurant.myRestaurants[i].id,
+            });
+
+            Gmap.addRightHandResults(Restaurant.myRestaurants[i]);
+
+        }
 
         console.log('Loading restaurant places .. ')
         console.log(Restaurant.myRestaurants)
