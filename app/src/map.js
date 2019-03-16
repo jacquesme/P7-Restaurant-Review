@@ -425,9 +425,9 @@ var Gmap = {
         infoWindowSmall.close(Gmap.map, marker);
     },
 
+    //Shows the info window with details of the restaurant
     showInfoWindow: function() {
-        //Shows the info window with details of the restaurant
-        const places = new google.maps.places.PlacesService(Gmap.map);
+        var places = new google.maps.places.PlacesService(Gmap.map);
         Gmap.closeInfoWindowSmall();
         var marker = this;
         places.getDetails({
