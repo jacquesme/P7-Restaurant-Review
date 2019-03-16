@@ -310,7 +310,7 @@ var Gmap = {
         if (Gmap.sort3Star) {
             if (Math.round(results[i].rating) <= 3) {
                 Gmap.addResultsAndMarkers(i, results, i);
-            }
+            } 
         } else if (Gmap.sort4Star) {
             if (Math.round(results[i].rating) === 4) {
                 Gmap.addResultsAndMarkers(i, results, i);
@@ -549,19 +549,58 @@ var Gmap = {
                 }
             }
         }
-        var seePhoto = document.getElementById('see-photo');
-        var photoDiv = document.getElementById('photo');
-        photoDiv.innerHTML = '<img class="photo-big" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
 
-        photoDiv.style.display = 'none';
-        if(Gmap.hasPhoto){
-            seePhoto.style.display = 'block';
-        }else{
-            seePhoto.style.display = 'none';
-        }
-
-        
+        /*-----------------------------------------------------------------------------------
+        adds the street view functionality
+        -------------------------------------------------------------------------------------*/
     
+       var sv = new google.maps.StreetViewService();
+       sv.getPanorama({
+           location: place.geometry.location,
+           radius: 50
+       }, processSVData);
+   
+       var panoDiv = document.getElementById('pano');
+       var streetViewWrapper = document.getElementById('street-view-wrapper');
+       var photoDiv = document.getElementById('photo');
+       var seePhoto = document.getElementById('see-photo');
+       var seeStreetView = document.getElementById('see-street-view');
+       photoDiv.innerHTML = '<img class="photo-big" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
+   
+       streetViewWrapper.style.display = 'block';
+       photoDiv.style.display = 'none';
+       if(Gmap.hasPhoto){
+           seePhoto.style.display = 'block';
+       }else{
+           seePhoto.style.display = 'none';
+       }
+   
+       function processSVData(data, status) {
+           if (status === 'OK') {
+               var panorama = new google.maps.StreetViewPanorama(panoDiv);
+               panorama.setPano(data.location.pano);
+               panorama.setPov({
+                   heading: 270,
+                   pitch: 0
+               });
+               panorama.setVisible(true);
+               
+               /*-----------------------------------------------------------------------------------
+               click photo  button and show photo hide street view
+               -------------------------------------------------------------------------------------*/
+               seePhoto.addEventListener("click", function(){
+                   seePhoto.style.display = 'none';
+                   streetViewWrapper.style.display = 'none';
+                   photoDiv.style.display = 'block';
+               });
+   
+           } else {
+               seePhoto.style.display = 'none';
+               streetViewWrapper.style.display = 'none';
+               photoDiv.style.display = 'block';
+           }
+       }
+        
     },
 
     //Close the Bigger Info Windows
