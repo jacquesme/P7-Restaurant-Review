@@ -27,6 +27,11 @@ var Restaurant = {
                 id: Restaurant.myRestaurants[i].id,
             });
 
+            google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseover', Gmap.showInfoWindowSmallMy);
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
+                    google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
+
             Gmap.addRightHandResults(Restaurant.myRestaurants[i]);
 
         }
