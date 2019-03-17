@@ -1,4 +1,5 @@
 <h1>Restaurant review site</h1>
+<h2>Technologies: HTML5, CSS3, Javascript, Google API.</h2>
 <p>Project requirements</p>
 <ol>
 <li>A Google Maps map loaded with the Google Maps API.</li>
