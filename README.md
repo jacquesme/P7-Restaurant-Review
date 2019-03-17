@@ -8,4 +8,3 @@
 <li>Add a restaurant by clicking on a specific place on the map.</li>
 </ol>
 <img src = "app/assets/images/mapPic.PNG" alt = "Website Picture">
-
