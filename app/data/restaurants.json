@@ -11,15 +11,15 @@
             "id": "0",
             "name":"Spur Steak Ranch",
             "address":"39 Rue des Petites Écuries, 75010 Paris",
-            "rating": 3.5,
+            "rating": 2,
             "review":[
                 {
-                    "stars":3,
-                    "comment":"Great! But not many veggie options."
+                    "stars":2,
+                    "comment":"Not good! But not many veggie options."
                 },
                 {
-                    "stars":4,
-                    "comment":"My favorite restaurant!"
+                    "stars":1,
+                    "comment":"Can be better!"
                 }
             ],
             "place_id": "0"
@@ -34,15 +34,15 @@
             "id": "1",
             "name":"Fish Aways",
             "address":"4 Rue Lamarck, 75018 Paris",
-            "rating": 4.5,
+            "rating": 1,
             "review":[
                 {
-                    "stars":5,
-                    "comment":"Tiny pizzeria next to Sacre Coeur!"
+                    "stars":1,
+                    "comment":"Cold food!"
                 },
                 {
-                    "stars":4,
-                    "comment":"Meh, it was fine."
+                    "stars":1,
+                    "comment":"Meh, there was no fireworks."
                 }
             ],
             "place_id": "1"

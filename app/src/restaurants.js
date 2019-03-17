@@ -28,9 +28,9 @@ var Restaurant = {
             });
 
             google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'mouseover', Gmap.showInfoWindowSmallMy);
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
-                    google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
+            google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
+            google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
+            google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
 
                     if (Gmap.sort3Star) {
                         if (Math.round(Restaurant.myRestaurants[i].rating) <= 3) {
