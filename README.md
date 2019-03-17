@@ -7,4 +7,4 @@
 <li>Add a review about an existing restaurant.</li>
 <li>Add a restaurant by clicking on a specific place on the map.</li>
 </ol>
-<img src = "assets/images/mapPic.PNG" alt = "Website Picture" height = "42px" width = "42px">
+<img src = "app/assets/images/mapPic.PNG" alt = "Website Picture" height = "42px" width = "42px">
