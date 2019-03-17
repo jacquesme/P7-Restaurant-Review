@@ -19,7 +19,7 @@ var Restaurant = {
             Gmap.addRightHandResults(Restaurant.myRestaurants[index]);
         })*/
         for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
-            Restaurant.markers[Restaurant.myRestaurants.length +i] = new google.maps.Marker({
+            Restaurant.markers[Restaurant.googleRestaurants.length +i] = new google.maps.Marker({
                 position: Restaurant.myRestaurants[i].geometry.location,
                 placeId: Restaurant.myRestaurants[i].id,
                 icon: Gmap.createMarker(Restaurant.myRestaurants[i]),
@@ -27,12 +27,35 @@ var Restaurant = {
                 id: Restaurant.myRestaurants[i].id,
             });
 
-            google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseover', Gmap.showInfoWindowSmallMy);
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
-                    google.maps.event.addListener(Restaurant.markers[Restaurant.myRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
+            google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'mouseover', Gmap.showInfoWindowSmallMy);
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'mouseout', Gmap.closeInfoWindowSmall);
+                    google.maps.event.addListener(Restaurant.markers[Restaurant.googleRestaurants.length +i], 'click', Gmap.showInfoWindowMy);
                     google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
 
-            Gmap.addRightHandResults(Restaurant.myRestaurants[i]);
+                    if (Gmap.sort3Star) {
+                        if (Math.round(Restaurant.myRestaurants[i].rating) <= 3) {
+                            Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
+                        }
+                    } else if (Gmap.sort4Star) {
+                        if (Math.round(Restaurant.myRestaurants[i].rating) === 4) {
+                            Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
+                        }
+                    } else if (Gmap.sort5Star) {
+                        if (Math.round(Restaurant.myRestaurants[i].rating) === 5) {
+                            Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
+                        }
+                    } else {
+                        if (Gmap.sortAsc) {
+                            Restaurant.myRestaurants.sort(function (a, b) {
+                                return b.rating - a.rating;
+                            });
+                        } else if (Gmap.sortDesc) {
+                            Restaurant.myRestaurants.sort(function (a, b) {
+                                return a.rating - b.rating;
+                            });
+                        }
+                        Gmap.addResultsAndMarkers(Restaurant.googleRestaurants.length+i, Restaurant.myRestaurants, i);
+                    }
 
         }
 

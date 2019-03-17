@@ -12,7 +12,7 @@ var Gmap = {
     newResNum: null,
     newPlace: [],
     photo: [],
-    hasPhoto: null,
+    hasPhoto: true,
     pos: null,
     restaurantIsNew: true,
     sort3Star: false, 
@@ -112,8 +112,9 @@ var Gmap = {
 
     //If map is dreagged search again for restaurants in the vicinity
     mapDragged: function() {
-        Restaurant.googleRestaurants = [];
         Gmap.sortBy.value = 'allStars';
+        Restaurant.googleRestaurants = [];
+        Gmap.restSort();
         Gmap.search();
     },
 
@@ -179,7 +180,8 @@ var Gmap = {
                     google.maps.event.addListener(Restaurant.markers[i], 'click', Gmap.showInfoWindow);
                     google.maps.event.addListener(Gmap.map, "click", Gmap.closeInfoWindow);
     
-                    Gmap.sortRestaurants(i, results, i);   
+                    Gmap.sortRestaurants(i, results, i);
+                       
                 }
                 
                 Restaurant.getPlaces();
@@ -545,7 +547,7 @@ var Gmap = {
        var streetViewWrapper = document.getElementById('street-view-wrapper');
        var photoDiv = document.getElementById('photo');
        var seePhoto = document.getElementById('see-photo');
-       var seeStreetView = document.getElementById('see-street-view');
+       //var seeStreetView = document.getElementById('see-street-view');
        photoDiv.innerHTML = '<img class="photo-big" ' + 'src="' + Gmap.createPhoto(place) + '"/>';
    
        streetViewWrapper.style.display = 'block';
