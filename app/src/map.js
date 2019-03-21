@@ -280,12 +280,12 @@ var Gmap = {
     },
 
     restSort: function() {
-        sortAsc = false;
-        sortDesc = false;
-        sort4Star = false;
-        sort3Star = false;
-        sort5Star = false;
-        allStars = false;
+        Gmap.sortAsc = false;
+        Gmap.sortDesc = false;
+        Gmap.sort4Star = false;
+        Gmap.sort3Star = false;
+        Gmap.sort5Star = false;
+        Gmap.allStars = false;
     },
 
     sortRestaurants: function(i, results, i) {
