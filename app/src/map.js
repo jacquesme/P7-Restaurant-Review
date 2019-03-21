@@ -765,6 +765,5 @@ var Gmap = {
     hideTheForm: function() {
         document.getElementById("form-wrapper").style.display = 'none';
     },
-        
 
 } 
