@@ -13,11 +13,7 @@ var Restaurant = {
 
     getPlaces: function () {
         Restaurant.myRestaurants = JSON.parse(Gmap.request.responseText);
-        /*Restaurant.myRestaurants.forEach(function (results, index) {
-            Restaurant.myRestaurants[index] = results;
-            Gmap.createMarker(Restaurant.myRestaurants[index].geometry.location.lat, Restaurant.myRestaurants[index].geometry.location.lng);
-            Gmap.addRightHandResults(Restaurant.myRestaurants[index]);
-        })*/
+    
         for (var i = 0; i < Restaurant.myRestaurants.length; i++) {
             Restaurant.markers[Restaurant.googleRestaurants.length +i] = new google.maps.Marker({
                 position: Restaurant.myRestaurants[i].geometry.location,
