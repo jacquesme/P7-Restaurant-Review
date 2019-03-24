@@ -168,9 +168,7 @@ var Gmap = {
                     Restaurant.markers[i] = new google.maps.Marker({
                         position: results[i].geometry.location,
                         placeId: results[i].id,
-                        //animation: google.maps.Animation.DROP,
                         icon: Gmap.createMarker(Restaurant.googleRestaurants[i]),
-                        //zIndex: 52,
                     });
 
 
