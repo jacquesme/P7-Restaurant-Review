@@ -118,9 +118,9 @@ var Gmap = {
         Gmap.search();
     },
 
+    //Input fields on autocomplete search for city
     autoComplete: function(){
         autocomplete = new google.maps.places.Autocomplete(
-            //Input fields on autocomplete search for city
             /** @type {!HTMLInputElement} */
             (document.getElementById('autocomplete-input')), {
                 types: ['(cities)'],
