@@ -7,5 +7,6 @@
 <li>Add a review about an existing restaurant.</li>
 <li>Add a restaurant by clicking on a specific place on the map.</li>
 </ol>
+<p>Here is the link: https://jacquesme.github.io/P7-Restaurant-Review/.</p>
 <img src = "app/assets/images/mapPic.PNG" alt = "Website Picture">
 <p></p>
